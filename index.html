@@ -417,7 +417,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       <input id="c-sec" type="number" min="0" max="59" value="0" pattern="[0-9]*"> sec
       <button class="big" id="c-go">Start timer</button>
     </div>
-    <div class="hint">Turn the volume up and check the side switch isn&rsquo;t on silent, or alarms will only flash.</div>
+    <div class="hint">Alarms play even when the iPad is on silent, using the volume buttons&rsquo; level. The screen must stay on for them to sound. <button class="linkbtn" id="snd-test">&#128264; Test the alarm sound</button></div>
   </div>
 
   <!-- Convert -->
@@ -859,20 +859,76 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   });
 
   /* ---------- sound ---------- */
-  var actx = null;
+  // The alarm is a short generated WAV played through an <audio> element.
+  // iOS mutes Web Audio when the iPad is on silent, but still plays media like this.
+  function makeAlarmWav() {
+    var rate = 22050, n = Math.floor(rate * 1.2), parts = [], i, t, k, local, env, v, x;
+    function u32(a) { return String.fromCharCode(a & 255, (a >> 8) & 255, (a >> 16) & 255, (a >> 24) & 255); }
+    function u16(a) { return String.fromCharCode(a & 255, (a >> 8) & 255); }
+    for (i = 0; i < n; i++) {
+      t = i / rate; k = Math.floor(t / 0.25); local = t - k * 0.25; v = 0;
+      if (k < 3 && local < 0.18) {
+        env = Math.min(1, local / 0.01, (0.18 - local) / 0.02);
+        v = env * (0.62 * Math.sin(2 * Math.PI * 880 * t) + 0.3 * Math.sin(2 * Math.PI * 1760 * t));
+      }
+      x = Math.round(v * 32000); if (x < 0) x += 65536;
+      parts.push(String.fromCharCode(x & 255, (x >> 8) & 255));
+    }
+    var body = parts.join("");
+    var hdr = "RIFF" + u32(36 + body.length) + "WAVE" + "fmt " + u32(16) + u16(1) + u16(1) +
+      u32(rate) + u32(rate * 2) + u16(2) + u16(16) + "data" + u32(body.length);
+    return "data:audio/wav;base64," + btoa(hdr + body);
+  }
+  var alarmSnd = null, sndReady = false, sndPlaying = false;
+  try { alarmSnd = new Audio(makeAlarmWav()); alarmSnd.loop = true; alarmSnd.preload = "auto"; } catch (e) { alarmSnd = null; }
+
+  // iOS only lets a page play sound after a tap, so the first tap quietly "unlocks" the alarm
   function unlockAudio() {
+    if (alarmSnd && !sndReady && !sndPlaying) {
+      try {
+        alarmSnd.muted = true;
+        var p = alarmSnd.play();
+        var done = function () {
+          if (!sndPlaying) { try { alarmSnd.pause(); alarmSnd.currentTime = 0; } catch (e) {} }
+          alarmSnd.muted = false; sndReady = true;
+        };
+        if (p && p.then) p.then(done, function () { alarmSnd.muted = false; }); else done();
+      } catch (e) {}
+    }
+    unlockBackup();
+  }
+  document.addEventListener("touchend", unlockAudio, false);
+  document.addEventListener("click", unlockAudio, false);
+
+  function startAlarmSound() {
+    if (!alarmSnd || sndPlaying) return;
+    sndPlaying = true;
+    try {
+      alarmSnd.muted = false;
+      try { alarmSnd.currentTime = 0; } catch (e) {}
+      var p = alarmSnd.play();
+      if (p && p["catch"]) p["catch"](function () { sndPlaying = false; });
+    } catch (e) { sndPlaying = false; }
+  }
+  function stopAlarmSound() {
+    sndPlaying = false;
+    if (!alarmSnd) return;
+    try { alarmSnd.pause(); alarmSnd.currentTime = 0; } catch (e) {}
+  }
+
+  // Backup beep (Web Audio), used only if the sound clip can't play
+  var actx = null;
+  function unlockBackup() {
     try {
       if (!actx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); }
       if (actx) {
-        if (actx.state === "suspended" && actx.resume) actx.resume();
+        if (actx.state !== "running" && actx.resume) actx.resume();
         var b = actx.createBuffer(1, 1, 22050), s = actx.createBufferSource();
         s.buffer = b; s.connect(actx.destination); if (s.start) s.start(0); else s.noteOn(0);
       }
     } catch (e) {}
   }
-  document.addEventListener("touchend", unlockAudio, false);
-  document.addEventListener("click", unlockAudio, false);
-  function beep() {
+  function backupBeep() {
     if (!actx) return;
     try {
       var t0 = actx.currentTime;
@@ -942,10 +998,19 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   function checkAlarm() {
     ringing = null;
     each(timers, function (t) { if (t.done && !ringing) ringing = t; });
-    if (ringing) { $("alarm-label").innerHTML = esc(ringing.label); $("alarm").className = "on"; }
-    else $("alarm").className = "";
+    if (ringing) { $("alarm-label").innerHTML = esc(ringing.label); $("alarm").className = "on"; startAlarmSound(); }
+    else { $("alarm").className = ""; stopAlarmSound(); }
   }
   tap($("alarm-stop"), function () { if (ringing) removeTimer(ringing.id); });
+  var testTimer = null;
+  tap($("snd-test"), function () {
+    if (ringing) return;
+    startAlarmSound();
+    if (!sndPlaying) backupBeep();
+    clearTimeout(testTimer);
+    testTimer = setTimeout(function () { if (!ringing) stopAlarmSound(); }, 2600);
+    toast("Playing the alarm. Use the volume buttons to adjust.");
+  });
   function tick() {
     var changed = false;
     each(timers, function (t) {
@@ -954,7 +1019,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       var rg = $("tr" + t.id); if (rg) rg.setAttribute("stroke-dashoffset", ringOffset(t));
     });
     if (changed) { saveTimers(); renderTimers(); checkAlarm(); }
-    if (ringing) beep();
+    if (ringing) { startAlarmSound(); if (!sndPlaying) backupBeep(); }
     renderCookTimers();
   }
   setInterval(tick, 1000);
