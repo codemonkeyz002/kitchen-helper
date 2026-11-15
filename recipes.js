@@ -283,5 +283,36 @@ window.KITCHEN_RECIPES = [
       { t: "Mix the chicken through the rice or arrange it on top, then sprinkle with {19}. Serve with a green salad and cucumber raita." }
     ],
     notes: "Baharat is in the world foods aisle of bigger supermarkets. To make your own, dry-toast 1 tbsp black peppercorns, 1 tbsp cumin seeds, 2 tsp coriander seeds, a cinnamon stick, 1 tsp whole cloves and ¼ tsp cardamom seeds for 3–4 minutes, cool, then grind with 1 tbsp paprika and ¼ tsp nutmeg (makes extra). Dried limes (loomi) are sold in Middle Eastern shops and online; a couple of pinches of black lime powder will do instead. Leave out the chilli to keep it mild for the kids. Keeps 3–4 days in the fridge or 3 months frozen. Original recipe: daringgourmet.com"
+  },
+  {
+    id: "spaghetti-garlic-oil-chilli",
+    tags: ["Dinner", "Lunch", "Vegetarian", "Budget"],
+    minutes: 20,
+    effort: 1,
+    emoji: "🌶️",
+    title: "Spaghetti with Garlic, Oil & Chilli",
+    category: "Mains",
+    serves: 4,
+    time: "20 min",
+    summary: "Aglio, olio e peperoncino: a 20-minute storecupboard classic. Based on Andy Cooks.",
+    ingredients: [
+      { q: 400, u: "g", n: "good dried spaghetti" },
+      { q: 6, u: "", n: "garlic clove" },
+      { q: 4, u: "tbsp", n: "extra virgin olive oil" },
+      { q: 1, u: "tsp", n: "dried chilli flakes" },
+      { q: 80, u: "g", n: "Parmesan, finely grated, plus extra to serve" },
+      { text: "Large handful of flat-leaf parsley" },
+      { text: "Sea salt" }
+    ],
+    steps: [
+      { t: "Bring a large pan of well-salted water to the boil. Cook {0}, stirring now and then, until al dente.", timer: 540, label: "Spaghetti" },
+      { t: "While it cooks, finely grate {4|Parmesan} and finely chop the parsley." },
+      { t: "Lightly crush {1} with the flat of a knife and cut them in half. Put them in a large, deep frying pan with {2} over a low heat. Let them sizzle gently, stirring now and then, until pale golden. Don't let them brown or the sauce will taste bitter.", timer: 300, label: "Garlic oil" },
+      { t: "Add {3} and cook for 30 seconds.", timer: 30, label: "Chilli" },
+      { t: "Scoop out a mug of the pasta water. Lift the spaghetti straight into the frying pan with tongs, add a splash of the pasta water and toss constantly until the oil and water come together into a glossy sauce. If it looks oily, add more water and keep tossing." },
+      { t: "Toss in the Parmesan, then most of the parsley, and season with salt to taste." },
+      { t: "Serve straight away, topped with the rest of the parsley and extra Parmesan." }
+    ],
+    notes: "The original serves 1 with 200g pasta; this is scaled to 4 normal portions of 100g. Use your best olive oil and good spaghetti, as the starch makes the sauce. Halve the chilli for kids. Parmesan isn't strictly vegetarian, so use a vegetarian Italian-style hard cheese if needed. Garlic time is a guide: go by colour. Original recipe: andy-cooks.com"
   }
 ];
