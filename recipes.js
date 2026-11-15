@@ -1,5 +1,8 @@
 /* Kitchen Helper recipe book.
    To add a recipe, copy one block below and edit it.
+   minutes: total time in minutes (used for sorting by quickest)
+   effort:  1 = easy, 2 = some effort, 3 = a project
+   rating / kids: optional starting star ratings 1-5 (ratings tapped on the iPad take priority)
    emoji: one emoji shown on the recipe card (optional)
    Ingredient: { q: amount (number, scales with servings), u: "unit", n: "name" }
                or { text: "something that doesn't scale" }
@@ -8,6 +11,8 @@
 window.KITCHEN_RECIPES = [
   {
     id: "bolognese",
+    minutes: 60,
+    effort: 2,
     emoji: "🍝",
     title: "Weeknight Spaghetti Bolognese",
     category: "Mains",
@@ -41,6 +46,8 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "leek-potato-soup",
+    minutes: 40,
+    effort: 1,
     emoji: "🥣",
     title: "Leek & Potato Soup",
     category: "Soups",
@@ -66,6 +73,8 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "victoria-sponge",
+    minutes: 50,
+    effort: 2,
     emoji: "🍰",
     title: "Victoria Sponge",
     category: "Baking",
@@ -96,6 +105,8 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "banana-bread",
+    minutes: 75,
+    effort: 1,
     emoji: "🍌",
     title: "Easy Banana Bread",
     category: "Baking",
@@ -123,6 +134,8 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "roast-chicken",
+    minutes: 105,
+    effort: 2,
     emoji: "🍗",
     title: "Simple Roast Chicken",
     category: "Mains",
@@ -150,6 +163,8 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "pancakes",
+    minutes: 20,
+    effort: 1,
     emoji: "🥞",
     title: "Thin British Pancakes",
     category: "Breakfast",

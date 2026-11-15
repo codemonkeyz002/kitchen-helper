@@ -79,6 +79,33 @@ h3 {
 .card-title { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 24px; line-height: 1.15; font-weight: 700; }
 .card-meta { font-size: 14px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
 .card-sum { font-size: 17px; color: #6b5f53; margin-top: 6px; line-height: 1.35; }
+.card-stats { margin-top: 8px; font-size: 15px; color: #6b5f53; font-weight: 600; }
+.card-stats .grp { display: inline-block; margin-right: 14px; white-space: nowrap; }
+.st { color: #e09a2d; letter-spacing: 1px; }
+.st.kids { color: #d0607f; }
+.st i { font-style: normal; color: #e3d8c8; }
+.unrated { color: #b9ad9e; font-style: italic; font-weight: 500; }
+.edots { letter-spacing: 1px; }
+.edots i { font-style: normal; color: #e3d8c8; }
+#sortrow { margin: 0 0 12px 0; font-size: 16px; color: #9a8b78; font-weight: 700; }
+#sortrow select {
+  font-size: 17px; font-weight: 600; padding: 7px 12px; border-radius: 12px; border: 0;
+  background: #ece3d5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235d5246' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;
+  padding-right: 34px; color: #5d5246; margin-left: 6px; -webkit-appearance: none;
+}
+/* ratings panel on recipe page */
+#r-rate {
+  display: flex; flex-wrap: wrap; background: #fff; border-radius: 20px; padding: 14px 10px; margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.06);
+}
+.rate-box { -webkit-flex: 1; flex: 1; min-width: 200px; padding: 4px 14px; border-left: 1px solid #f1eadf; }
+.rate-box:first-child { border-left: 0; }
+.rate-lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: #9a8b78; font-weight: 700; }
+.rate-val { font-size: 22px; font-weight: 700; margin-top: 4px; }
+.rate-sub { font-size: 14px; color: #9a8b78; font-weight: 600; }
+.sbtn { background: none; border: 0; padding: 2px 3px; font-size: 34px; line-height: 1.1; color: #e3d8c8; }
+.sbtn.on { color: #e09a2d; }
+.kidsrow .sbtn.on { color: #d0607f; }
 .empty { width: 100%; text-align: center; color: #9a8b78; padding: 50px 0; }
 #listfoot { text-align: center; color: #9a8b78; font-size: 15px; margin-top: 18px; }
 .linkbtn { background: none; border: 0; color: #b0702c; font-weight: 700; padding: 6px; font-size: 15px; }
@@ -272,6 +299,15 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       <input id="search" type="text" placeholder="Search recipes or ingredients" autocomplete="off" autocorrect="off">
     </div>
     <div id="cats"></div>
+    <div id="sortrow">Sort by
+      <select id="sort">
+        <option value="az">A&ndash;Z</option>
+        <option value="taste">Best rated</option>
+        <option value="kids">Kids&rsquo; favourites</option>
+        <option value="quick">Quickest</option>
+        <option value="easy">Easiest</option>
+      </select>
+    </div>
     <div id="list"></div>
     <div id="listfoot"><span id="rcount"></span> &middot; <button class="linkbtn" id="refresh">Check for new recipes</button></div>
   </div>
@@ -287,6 +323,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
         <div id="r-meta"></div>
       </div>
     </div>
+    <div id="r-rate"></div>
     <div class="toolbar">
       <div class="serves">
         <button class="round" id="s-minus">&minus;</button>
@@ -435,8 +472,39 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     return frac(q) + " " + u;
   }
 
+  /* ---------- ratings, time, effort ---------- */
+  var ratings = load("ratings", {});
+  var EFFORT = ["", "Easy", "Some effort", "A project"];
+  function getRating(r, k) {
+    var mine = ratings[r.id];
+    if (mine && typeof mine[k] === "number") return mine[k];
+    return (k === "taste" ? r.rating : r.kids) || 0;
+  }
+  function setRating(r, k, v) {
+    if (!ratings[r.id]) ratings[r.id] = {};
+    ratings[r.id][k] = v;
+    store("ratings", ratings);
+  }
+  function starStr(n, kids) {
+    var s = "", i;
+    for (i = 1; i <= 5; i++) s += i <= n ? "★" : "<i>★</i>";
+    return '<span class="st' + (kids ? " kids" : "") + '">' + s + "</span>";
+  }
+  function effortStr(e) {
+    var s = "", i;
+    for (i = 1; i <= 3; i++) s += i <= e ? "●" : "<i>●</i>";
+    return '<span class="edots">' + s + "</span> " + EFFORT[e];
+  }
+  function fmtMins(m) {
+    if (!m) return "";
+    var h = Math.floor(m / 60), mm = m % 60;
+    return h ? h + " hr" + (mm ? " " + mm + " min" : "") : mm + " min";
+  }
+  function timeOf(r) { return r.minutes ? fmtMins(r.minutes) : (r.time || ""); }
+  function timeWord(m) { return !m ? "" : (m <= 30 ? "Quick" : (m <= 60 ? "Under an hour" : "Takes a while")); }
+
   /* ---------- recipes ---------- */
-  var recipes = [], openRecipe = null, serves = 4, cat = "All", checked = {}, curStep = -1;
+  var recipes = [], openRecipe = null, serves = 4, cat = "All", checked = {}, curStep = -1, sortBy = load("sort", "az");
   function getRecipes() { return (window.KITCHEN_RECIPES || []).slice(0); }
   function byId(id) { for (var i = 0; i < recipes.length; i++) if (recipes[i].id === id) return recipes[i]; return null; }
 
@@ -459,7 +527,15 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   }
   function renderList() {
     var q = $("search").value, h = "", n = 0;
-    var sorted = recipes.slice(0).sort(function (a, b) { return a.title < b.title ? -1 : 1; });
+    var sorted = recipes.slice(0).sort(function (a, b) {
+      var d = 0;
+      if (sortBy === "taste") d = getRating(b, "taste") - getRating(a, "taste");
+      else if (sortBy === "kids") d = getRating(b, "kids") - getRating(a, "kids");
+      else if (sortBy === "quick") d = (a.minutes || 9999) - (b.minutes || 9999);
+      else if (sortBy === "easy") d = ((a.effort || 9) - (b.effort || 9)) || ((a.minutes || 9999) - (b.minutes || 9999));
+      if (d) return d;
+      return a.title < b.title ? -1 : 1;
+    });
     each(sorted, function (r) {
       if (cat !== "All" && r.category !== cat) return;
       if (!matches(r, q)) return;
@@ -468,14 +544,25 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       h += '<button class="card" data-id="' + esc(r.id) + '">' +
         '<div class="card-art" style="background:' + t.bg + '">' + esc(emojiFor(r)) + "</div>" +
         '<div class="card-body"><div class="card-title">' + esc(r.title) + "</div>" +
-        '<div class="card-meta" style="color:' + t.fg + '">' + esc(r.category || "") + (r.time ? " &middot; " + esc(r.time) : "") + "</div>" +
-        (r.summary ? '<div class="card-sum">' + esc(r.summary) + "</div>" : "") + "</div></button>";
+        '<div class="card-meta" style="color:' + t.fg + '">' + esc(r.category || "") + (timeOf(r) ? " &middot; " + esc(timeOf(r)) : "") + "</div>" +
+        (r.summary ? '<div class="card-sum">' + esc(r.summary) + "</div>" : "") +
+        '<div class="card-stats">' + cardStats(r) + "</div></div></button>";
     });
     $("list").innerHTML = n ? h : '<div class="empty">No recipes match that search.</div>';
     $("rcount").innerHTML = recipes.length + " recipe" + (recipes.length === 1 ? "" : "s");
     each($("list").querySelectorAll(".card"), function (b) { tap(b, function () { showRecipe(b.getAttribute("data-id")); }); });
   }
+  function cardStats(r) {
+    var ts = getRating(r, "taste"), ks = getRating(r, "kids"), h = "";
+    h += ts ? '<span class="grp">' + starStr(ts) + "</span>" : "";
+    h += ks ? '<span class="grp">Kids ' + starStr(ks, true) + "</span>" : "";
+    if (!ts && !ks) h += '<span class="grp unrated">Not rated yet</span>';
+    if (r.effort) h += '<span class="grp">' + effortStr(r.effort) + "</span>";
+    return h;
+  }
   $("search").addEventListener("input", renderList, false);
+  $("sort").value = sortBy;
+  $("sort").addEventListener("change", function () { sortBy = $("sort").value; store("sort", sortBy); renderList(); }, false);
 
   function showRecipe(id) {
     var r = byId(id); if (!r) return;
@@ -492,8 +579,30 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     $("r-title").innerHTML = esc(r.title);
     $("r-sum").innerHTML = esc(r.summary || "");
     $("r-meta").innerHTML = (r.category ? '<span class="pill" style="color:' + t.fg + '">' + esc(r.category) + "</span>" : "") +
-      (r.time ? '<span class="pill">&#9201; ' + esc(r.time) + "</span>" : "") +
       '<span class="pill">' + (r.steps || []).length + " steps</span>";
+    renderRate();
+  }
+  function starButtons(k, val) {
+    var h = '<div class="' + (k === "kids" ? "kidsrow" : "") + '">', i;
+    for (i = 1; i <= 5; i++) h += '<button class="sbtn' + (i <= val ? " on" : "") + '" data-k="' + k + '" data-v="' + i + '">★</button>';
+    return h + "</div>";
+  }
+  var RATE_WORDS = ["Tap to rate", "Not for us", "It was OK", "Pretty good", "Really good", "Family favourite"];
+  var KID_WORDS = ["Tap to rate", "Refused it", "Picked at it", "Ate it", "Liked it", "Asked for more"];
+  function renderRate() {
+    var r = openRecipe, ts = getRating(r, "taste"), ks = getRating(r, "kids");
+    $("r-rate").innerHTML =
+      '<div class="rate-box"><div class="rate-lbl">How good is it?</div>' + starButtons("taste", ts) + '<div class="rate-sub">' + RATE_WORDS[ts] + "</div></div>" +
+      '<div class="rate-box"><div class="rate-lbl">Kids&rsquo; verdict</div>' + starButtons("kids", ks) + '<div class="rate-sub">' + KID_WORDS[ks] + "</div></div>" +
+      '<div class="rate-box"><div class="rate-lbl">Time</div><div class="rate-val">' + esc(timeOf(r) || "–") + '</div><div class="rate-sub">' + timeWord(r.minutes) + "</div></div>" +
+      '<div class="rate-box"><div class="rate-lbl">Effort</div><div class="rate-val">' + (r.effort ? effortStr(r.effort) : "–") + "</div></div>";
+    each($("r-rate").querySelectorAll(".sbtn"), function (b) {
+      tap(b, function () {
+        var k = b.getAttribute("data-k"), v = +b.getAttribute("data-v");
+        if (getRating(r, k) === v && v === 1) v = 0; // tap the first star again to clear
+        setRating(r, k, v); renderRate(); renderList();
+      });
+    });
   }
   function closeRecipe() { openRecipe = null; showTab("recipes"); }
   tap($("r-back"), closeRecipe);
