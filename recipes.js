@@ -201,5 +201,42 @@ window.KITCHEN_RECIPES = [
       { t: "Serve straight away with lemon and sugar, or keep warm in a low oven while you cook the rest." }
     ],
     notes: "Makes about 8 pancakes."
+  },
+  {
+    id: "lemon-yoghurt-cake",
+    tags: ["Baking", "Dessert", "Vegetarian"],
+    minutes: 65,
+    effort: 1,
+    emoji: "🍋",
+    title: "Glazed Lemon Yoghurt Cake",
+    category: "Baking",
+    serves: 10,
+    time: "1 hr 5 min",
+    summary: "A moist, one-bowl lemon cake with a drippy lemon glaze. Based on RecipeTin Eats.",
+    ingredients: [
+      { q: 160, u: "ml", n: "vegetable or sunflower oil" },
+      { q: 2, u: "", n: "large egg" },
+      { q: 1.5, u: "tbsp", n: "lemon zest, finely grated (about 2 lemons)" },
+      { q: 60, u: "ml", n: "lemon juice" },
+      { q: 250, u: "g", n: "thick plain yoghurt (full fat is best)" },
+      { q: 250, u: "g", n: "caster sugar" },
+      { q: 300, u: "g", n: "plain flour" },
+      { q: 4, u: "tsp", n: "baking powder" },
+      { text: "Pinch of salt" },
+      { q: 210, u: "g", n: "icing sugar, for the glaze" },
+      { q: 1, u: "tbsp", n: "lemon juice, for the glaze" },
+      { q: 1.5, u: "tbsp", n: "plain yoghurt, for the glaze" },
+      { text: "Butter for greasing the tin" }
+    ],
+    steps: [
+      { t: "Heat the oven to 180°C (160°C fan, gas 4). Grease a deep 20cm round cake tin (a springform is ideal) with butter and line the base with baking paper." },
+      { t: "In a large bowl, whisk together {0}, {1}, {2}, {3}, {4} and {5} until evenly mixed." },
+      { t: "Add {6}, {7} and a pinch of salt. Whisk just until smooth; a few small lumps are fine. The batter should be thick but still pourable." },
+      { t: "Pour into the tin and bake until well risen and a skewer pushed into the middle comes out clean.", timer: 3000, label: "Lemon cake" },
+      { t: "Take the cake out of the tin and leave it on a wire rack to cool. The more it cools, the better the glaze will set.", timer: 1800, label: "Cool cake" },
+      { t: "For the glaze, whisk {9|icing sugar}, {10|lemon juice} and {11|yoghurt} until smooth. It should be thick but drip slowly off the whisk. If it's too stiff, add a little more yoghurt a teaspoon at a time." },
+      { t: "Sit the cake on the rack over a tray or baking paper. Pour the glaze onto the middle and gently push it towards the edges so it drips down the sides. Leave it to set before moving the cake.", timer: 3600, label: "Glaze setting" }
+    ],
+    notes: "Allow an extra 1½ hours or so for cooling and setting the glaze. Use thick yoghurt (or sour cream), as fat-free yoghurt is too thin. Some 20cm tins are too shallow and overflow, so use a deep or springform tin. Keeps 5 days in an airtight tin. For a cream cheese frosting instead of the glaze, beat 200g spreadable cream cheese with 240g icing sugar and 2 tbsp lemon juice. Original recipe: recipetineats.com/lemon-cake"
   }
 ];
