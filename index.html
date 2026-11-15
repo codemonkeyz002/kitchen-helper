@@ -341,7 +341,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       </select>
     </div>
     <div id="list"></div>
-    <div id="listfoot"><span id="rcount"></span> &middot; <button class="linkbtn" id="refresh">Check for new recipes</button> &middot; <button class="linkbtn" id="share-open">Share ratings</button></div>
+    <div id="listfoot"><span id="rcount"></span> &middot; <button class="linkbtn" id="refresh">Check for new recipes</button> &middot; <button class="linkbtn" id="share-open">Share ratings</button> &middot; <button class="linkbtn" id="reload-page">Reload page</button></div>
   </div>
 
   <!-- Recipe detail -->
@@ -998,6 +998,17 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     } catch (e) {}
     toast(ok ? "Copied. Paste it into a Claude chat." : "Couldn't copy. Take a photo of the screen instead.");
   });
+  // Full page reload (picks up design/feature updates). Timers and ratings survive it.
+  function reloadPage() {
+    var base = location.href.split("?")[0].split("#")[0];
+    location.replace(base + "?r=" + Date.now());
+  }
+  tap($("reload-page"), function () { toast("Reloading…"); setTimeout(reloadPage, 300); });
+  // Overnight, reload once between 3 and 4am if no timers are running, so updates arrive by morning
+  setInterval(function () {
+    var d = new Date(), today = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+    if (d.getHours() === 3 && !timers.length && load("nightly", "") !== today) { store("nightly", today); reloadPage(); }
+  }, 10 * 60 * 1000);
   // Quietly pick up new recipes every 20 minutes
   setInterval(function () { if (!openRecipe) reloadRecipes(false); }, 20 * 60 * 1000);
 
