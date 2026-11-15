@@ -6,188 +6,257 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Kitchen">
+<meta name="theme-color" content="#1f2b24">
 <title>Kitchen Helper</title>
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: rgba(0,0,0,0); }
 html, body { margin: 0; padding: 0; }
 body {
   font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background: #f6f1e9; color: #2b2622; font-size: 20px; line-height: 1.45;
+  background: #f7f2ea; color: #2a2420; font-size: 20px; line-height: 1.45;
   -webkit-text-size-adjust: 100%;
 }
-button { font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; }
-input, select { font-family: inherit; font-size: 22px; }
+.serif { font-family: "Iowan Old Style", "Palatino", Georgia, serif; }
+button { font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; -webkit-appearance: none; }
+button:active { opacity: 0.75; }
+input, select { font-family: inherit; font-size: 22px; color: #2a2420; }
 
-/* Header */
+/* ---------- Header ---------- */
 #top {
   position: fixed; top: 0; left: 0; right: 0; z-index: 10;
-  background: #2f3b33; color: #fff; padding: 12px 20px 0 20px;
+  background: #1f2b24; color: #fff; padding: 18px 28px 14px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
 }
-#top-row { display: flex; align-items: center; }
-#brand { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
-#clock { margin-left: auto; font-size: 34px; font-weight: 300; font-variant-numeric: tabular-nums; }
-#tabs { display: flex; margin-top: 8px; }
+#top-row { display: flex; align-items: flex-end; }
+#greet { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 32px; line-height: 1.1; }
+#date { font-size: 16px; color: #a9b8ad; margin-top: 4px; letter-spacing: 0.4px; }
+#clock { margin-left: auto; font-size: 50px; font-weight: 200; line-height: 1; letter-spacing: -1px; }
+#tabs { display: flex; margin-top: 16px; background: rgba(255,255,255,0.08); border-radius: 16px; padding: 5px; }
 .tab {
-  background: none; border: 0; color: #c9d3cb; padding: 12px 22px 14px 22px;
-  font-size: 21px; font-weight: 600; border-bottom: 4px solid transparent; margin-right: 6px;
+  flex: 1; background: none; border: 0; color: #c2cec5; padding: 12px 0; border-radius: 12px;
+  font-size: 20px; font-weight: 600;
 }
-.tab.on { color: #fff; border-bottom-color: #e8a33d; }
+.tab.on { background: #f7f2ea; color: #1f2b24; }
 .badge {
-  display: inline-block; background: #e8a33d; color: #2b2622; border-radius: 14px;
-  font-size: 15px; padding: 1px 9px; margin-left: 6px; vertical-align: 2px;
+  display: inline-block; background: #e09a2d; color: #fff; border-radius: 12px;
+  font-size: 14px; line-height: 22px; min-width: 22px; padding: 0 7px; margin-left: 7px; vertical-align: 2px;
 }
-#main { padding: 140px 20px 40px 20px; max-width: 1000px; margin: 0 auto; }
+#main { padding: 186px 28px 50px 28px; max-width: 1024px; margin: 0 auto; }
 .view { display: none; }
 .view.on { display: block; }
+h3 {
+  font-size: 15px; text-transform: uppercase; letter-spacing: 1.4px; color: #9a8b78;
+  margin: 8px 0 12px 2px; font-weight: 700;
+}
 
-/* Recipe list */
+/* ---------- Recipe list ---------- */
+.searchwrap { position: relative; }
+.searchwrap svg { position: absolute; left: 18px; top: 17px; }
 #search {
-  width: 100%; padding: 14px 18px; border-radius: 14px; border: 2px solid #ddd2c2;
+  width: 100%; padding: 15px 18px 15px 54px; border-radius: 16px; border: 0;
   background: #fff; -webkit-appearance: none; outline: none;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 14px rgba(60,40,20,0.06);
 }
-#cats { margin: 14px 0 6px 0; }
+#cats { margin: 16px 0 8px 0; }
 .chip {
-  display: inline-block; border: 2px solid #ccbfae; background: #fff; border-radius: 22px;
-  padding: 8px 18px; margin: 0 8px 10px 0; font-size: 18px; font-weight: 600;
+  display: inline-block; border: 0; background: #ece3d5; border-radius: 22px;
+  padding: 9px 18px; margin: 0 8px 10px 0; font-size: 17px; font-weight: 600; color: #5d5246;
 }
-.chip.on { background: #2f3b33; color: #fff; border-color: #2f3b33; }
-#list { margin-top: 6px; }
+.chip.on { background: #1f2b24; color: #fff; }
+#list { display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 4px; }
 .card {
-  display: block; width: 100%; text-align: left; background: #fff; border: 0;
-  border-radius: 16px; padding: 18px 20px; margin-bottom: 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  width: 49%; width: calc(50% - 8px); text-align: left; background: #fff; border: 0;
+  border-radius: 20px; padding: 0; margin-bottom: 16px; overflow: hidden;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.07);
+  display: flex; align-items: stretch;
 }
-.card-title { font-size: 24px; font-weight: 700; }
-.card-meta { font-size: 16px; color: #8a7d6d; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.6px; }
-.card-sum { font-size: 18px; color: #5a5048; margin-top: 6px; }
-.empty { text-align: center; color: #8a7d6d; padding: 40px 0; }
-#listfoot { text-align: center; color: #8a7d6d; font-size: 15px; margin-top: 20px; }
-.linkbtn { background: none; border: 0; color: #a0602a; font-weight: 600; text-decoration: underline; padding: 6px; font-size: 15px; }
+@media (max-width: 700px) { .card { width: 100%; } }
+.card-art {
+  width: 104px; min-height: 130px; display: flex; align-items: center; justify-content: center;
+  font-size: 50px; -webkit-flex-shrink: 0; flex-shrink: 0;
+}
+.card-body { padding: 16px 18px; -webkit-flex: 1; flex: 1; }
+.card-title { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 24px; line-height: 1.15; font-weight: 700; }
+.card-meta { font-size: 14px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+.card-sum { font-size: 17px; color: #6b5f53; margin-top: 6px; line-height: 1.35; }
+.empty { width: 100%; text-align: center; color: #9a8b78; padding: 50px 0; }
+#listfoot { text-align: center; color: #9a8b78; font-size: 15px; margin-top: 18px; }
+.linkbtn { background: none; border: 0; color: #b0702c; font-weight: 700; padding: 6px; font-size: 15px; }
 
-/* Recipe detail */
+/* ---------- Recipe detail ---------- */
 .back {
-  background: #fff; border: 2px solid #ddd2c2; border-radius: 12px; padding: 10px 18px;
-  font-weight: 600; font-size: 18px; margin-bottom: 14px;
+  background: #fff; border: 0; border-radius: 14px; padding: 11px 18px;
+  font-weight: 600; font-size: 18px; margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.08);
 }
-#r-title { font-size: 34px; line-height: 1.15; margin: 4px 0 4px 0; }
-#r-meta { color: #8a7d6d; font-size: 17px; text-transform: uppercase; letter-spacing: 0.6px; }
-#r-sum { color: #5a5048; margin: 8px 0 14px 0; }
-.toolbar { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
-.serves { display: flex; align-items: center; background: #fff; border-radius: 14px; padding: 6px; margin-right: 14px; margin-bottom: 8px; }
-.serves span { padding: 0 14px; font-weight: 600; }
+#hero { border-radius: 24px; padding: 26px 28px; display: flex; align-items: center; margin-bottom: 18px; }
+#hero-art {
+  width: 110px; height: 110px; border-radius: 55px; background: rgba(255,255,255,0.7);
+  font-size: 60px; line-height: 110px; text-align: center; margin-right: 24px; -webkit-flex-shrink: 0; flex-shrink: 0;
+}
+#r-title { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 38px; line-height: 1.1; margin: 0; }
+#r-sum { color: #4f453c; margin-top: 6px; font-size: 19px; }
+#r-meta { margin-top: 10px; }
+.pill {
+  display: inline-block; background: rgba(255,255,255,0.75); border-radius: 14px; padding: 4px 13px;
+  font-size: 15px; font-weight: 700; margin: 0 6px 4px 0; color: #4f453c;
+}
+.toolbar { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.serves {
+  display: flex; align-items: center; background: #fff; border-radius: 18px; padding: 6px; margin-right: 14px; margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.08);
+}
+.serves span { padding: 0 16px; font-weight: 700; min-width: 130px; text-align: center; }
 .round {
-  width: 52px; height: 52px; border-radius: 26px; border: 0; background: #efe6d8;
+  width: 52px; height: 52px; border-radius: 26px; border: 0; background: #f1e8da;
   font-size: 28px; font-weight: 700; line-height: 52px; padding: 0;
 }
 .big {
-  background: #e8a33d; border: 0; border-radius: 14px; padding: 16px 26px;
-  font-weight: 700; font-size: 21px; margin-bottom: 8px;
+  background: #e09a2d; color: #fff; border: 0; border-radius: 18px; padding: 17px 28px;
+  font-weight: 700; font-size: 21px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(224,154,45,0.35);
 }
 .cols { overflow: hidden; }
-.col-ing { float: left; width: 40%; padding-right: 24px; }
+.col-ing { float: left; width: 40%; padding-right: 22px; }
 .col-steps { float: left; width: 60%; }
 @media (max-width: 760px) { .col-ing, .col-steps { float: none; width: 100%; padding-right: 0; } }
-h3 { font-size: 18px; text-transform: uppercase; letter-spacing: 1px; color: #8a7d6d; margin: 6px 0 10px 0; }
+.panel {
+  background: #fff; border-radius: 20px; padding: 8px 0; margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.06);
+}
 .ing {
-  display: block; width: 100%; text-align: left; background: #fff; border: 0; border-radius: 12px;
-  padding: 12px 14px 12px 50px; margin-bottom: 8px; position: relative; font-size: 20px;
+  display: block; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid #f1eadf;
+  padding: 13px 16px 13px 58px; position: relative; font-size: 19px;
 }
+.ing:first-child { border-top: 0; }
 .ing:before {
-  content: ""; position: absolute; left: 14px; top: 14px; width: 22px; height: 22px;
-  border: 2px solid #ccbfae; border-radius: 6px;
+  content: ""; position: absolute; left: 18px; top: 15px; width: 22px; height: 22px;
+  border: 2px solid #d6c9b6; border-radius: 12px;
 }
-.ing.done { color: #b0a597; text-decoration: line-through; background: #f1ebe2; }
-.ing.done:before { background: #7d9a83; border-color: #7d9a83; }
+.ing.done { color: #b9ad9e; text-decoration: line-through; }
+.ing.done:before { background: #6f9579; border-color: #6f9579; }
+.ing.done:after {
+  content: ""; position: absolute; left: 26px; top: 19px; width: 6px; height: 11px;
+  border: solid #fff; border-width: 0 3px 3px 0; -webkit-transform: rotate(45deg); transform: rotate(45deg);
+}
+.ing.note { font-style: italic; color: #7a6e61; }
 .qty { font-weight: 700; }
 .step {
-  background: #fff; border-radius: 14px; padding: 16px 18px 16px 62px; margin-bottom: 12px;
+  background: #fff; border-radius: 20px; padding: 18px 20px 18px 74px; margin-bottom: 12px;
   position: relative; border: 3px solid transparent;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.05);
 }
-.step.cur { border-color: #e8a33d; }
 .step-n {
-  position: absolute; left: 14px; top: 14px; width: 34px; height: 34px; border-radius: 17px;
-  background: #2f3b33; color: #fff; text-align: center; line-height: 34px; font-weight: 700; font-size: 17px;
+  position: absolute; left: 20px; top: 12px; font-family: "Iowan Old Style", "Palatino", Georgia, serif;
+  font-size: 36px; font-weight: 700; line-height: 1;
 }
 .tbtn {
-  display: inline-block; margin-top: 10px; background: #2f3b33; color: #fff; border: 0;
-  border-radius: 10px; padding: 10px 16px; font-size: 17px; font-weight: 600;
+  display: inline-block; margin-top: 12px; background: #1f2b24; color: #fff; border: 0;
+  border-radius: 12px; padding: 10px 16px; font-size: 17px; font-weight: 600;
 }
-.notes { background: #fbf3df; border-radius: 14px; padding: 14px 18px; margin-top: 16px; font-size: 18px; }
+.notes {
+  background: #fdf3dc; border-radius: 20px; padding: 16px 20px; margin-top: 6px; font-size: 18px;
+  border-left: 6px solid #e09a2d;
+}
 
-/* Cook mode */
+/* ---------- Cook mode ---------- */
 #cook {
   display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 20;
-  background: #2f3b33; color: #fff; padding: 30px 40px;
+  background: #1f2b24; color: #fff; padding: 34px 44px;
 }
 #cook.on { display: block; }
 #cook-top { display: flex; align-items: center; }
-#cook-name { font-size: 20px; color: #c9d3cb; }
-#cook-close { margin-left: auto; background: rgba(255,255,255,0.15); border: 0; color: #fff; border-radius: 12px; padding: 12px 22px; font-weight: 600; }
-#cook-count { font-size: 22px; color: #e8a33d; font-weight: 700; margin-top: 40px; }
-#cook-text { font-size: 38px; line-height: 1.35; margin-top: 16px; }
-#cook-timer { margin-top: 24px; }
-#cook-timer .tbtn { background: #e8a33d; color: #2b2622; font-size: 24px; padding: 16px 26px; }
-#cook-nav { position: absolute; left: 40px; right: 40px; bottom: 34px; display: flex; }
-#cook-nav button { flex: 1; border: 0; border-radius: 18px; padding: 26px; font-size: 26px; font-weight: 700; }
-#cook-prev { background: rgba(255,255,255,0.15); color: #fff; margin-right: 16px; }
-#cook-next { background: #e8a33d; color: #2b2622; }
-#cook-timers { margin-top: 20px; font-size: 22px; color: #c9d3cb; }
+#cook-name { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 24px; color: #c2cec5; }
+#cook-close { margin-left: auto; background: rgba(255,255,255,0.12); border: 0; color: #fff; border-radius: 14px; padding: 12px 24px; font-weight: 600; }
+#cook-dots { margin-top: 26px; }
+.dot { display: inline-block; width: 30px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.18); margin-right: 6px; }
+.dot.on { background: #e09a2d; }
+#cook-count { font-size: 20px; color: #e09a2d; font-weight: 700; margin-top: 22px; letter-spacing: 1px; text-transform: uppercase; }
+#cook-text { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 40px; line-height: 1.35; margin-top: 14px; }
+#cook-timer { margin-top: 26px; }
+#cook-timer .tbtn { background: #e09a2d; color: #fff; font-size: 24px; padding: 16px 26px; border-radius: 16px; }
+#cook-nav { position: absolute; left: 44px; right: 44px; bottom: 36px; display: flex; }
+#cook-nav button { flex: 1; border: 0; border-radius: 20px; padding: 26px; font-size: 26px; font-weight: 700; }
+#cook-prev { background: rgba(255,255,255,0.12); color: #fff; margin-right: 16px; }
+#cook-next { background: #e09a2d; color: #fff; }
+#cook-timers { margin-top: 22px; font-size: 22px; color: #c2cec5; }
 
-/* Timers */
-.presets { overflow: hidden; margin-bottom: 18px; }
-.preset {
-  float: left; width: 23%; margin: 0 2% 12px 0; background: #fff; border: 0; border-radius: 16px;
-  padding: 22px 0; font-size: 26px; font-weight: 700;
-}
-.custom { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 22px; display: flex; align-items: center; flex-wrap: wrap; }
-.custom input { width: 90px; text-align: center; padding: 10px; border: 2px solid #ddd2c2; border-radius: 10px; margin: 0 8px; }
-.custom .big { margin: 0 0 0 auto; }
+/* ---------- Timers ---------- */
 .timer {
-  background: #fff; border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center;
+  background: #fff; border-radius: 22px; padding: 16px 22px; margin-bottom: 14px; display: flex; align-items: center;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.06);
 }
-.timer.ringing { background: #e8a33d; }
-.timer-left { font-size: 52px; font-weight: 300; font-variant-numeric: tabular-nums; min-width: 190px; }
-.timer-label { font-size: 20px; font-weight: 600; margin-left: 10px; }
+.timer.ringing { background: #fbe3bd; }
+.ring { position: relative; width: 120px; height: 120px; -webkit-flex-shrink: 0; flex-shrink: 0; }
+.ring svg { position: absolute; left: 0; top: 0; -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+.ring-txt {
+  position: absolute; left: 0; right: 0; top: 0; line-height: 120px; text-align: center;
+  font-size: 27px; font-weight: 300; letter-spacing: -0.5px;
+}
+.timer-label { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 24px; font-weight: 700; margin-left: 22px; }
+.timer-state { font-size: 15px; color: #9a8b78; font-family: -apple-system, "Helvetica Neue", sans-serif; font-weight: 600; margin-top: 2px; }
 .timer-btns { margin-left: auto; white-space: nowrap; }
-.timer-btns button { border: 0; border-radius: 12px; padding: 14px 16px; margin-left: 8px; font-weight: 600; font-size: 18px; background: #efe6d8; }
-.hint { color: #8a7d6d; font-size: 16px; margin-top: 18px; }
+.timer-btns button { border: 0; border-radius: 14px; padding: 14px 16px; margin-left: 8px; font-weight: 600; font-size: 18px; background: #f1e8da; }
+.timer-btns button.stop { background: #1f2b24; color: #fff; }
+.presets { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 8px; }
+.preset {
+  width: 23.5%; width: calc(25% - 9px); margin-bottom: 12px; background: #fff; border: 0; border-radius: 18px;
+  padding: 22px 0 18px 0; box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 12px rgba(60,40,20,0.05);
+}
+.preset b { display: block; font-size: 34px; font-weight: 300; line-height: 1; }
+.preset span { display: block; font-size: 14px; color: #9a8b78; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+.custom {
+  background: #fff; border-radius: 20px; padding: 16px 18px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 12px rgba(60,40,20,0.05);
+}
+.custom input { width: 90px; text-align: center; padding: 10px; border: 2px solid #e6dccd; border-radius: 12px; margin: 0 8px; -webkit-appearance: none; }
+.custom .big { margin: 0 0 0 auto; }
+.hint { color: #9a8b78; font-size: 16px; margin-top: 8px; line-height: 1.5; }
+.noTimers { text-align: center; color: #9a8b78; padding: 18px 0 26px 0; font-size: 18px; }
 
-/* Convert */
-.panel { background: #fff; border-radius: 16px; padding: 18px 20px; margin-bottom: 18px; }
-.conv-in { display: flex; align-items: center; flex-wrap: wrap; }
-.conv-in input { width: 160px; padding: 12px; border: 2px solid #ddd2c2; border-radius: 12px; margin-right: 10px; }
-.conv-in select { padding: 12px; border-radius: 12px; border: 2px solid #ddd2c2; background: #fff; }
-.seg { display: inline-block; margin-bottom: 14px; }
-.seg button { border: 2px solid #2f3b33; background: #fff; padding: 10px 20px; font-weight: 600; font-size: 18px; }
-.seg button.on { background: #2f3b33; color: #fff; }
-.seg button:first-child { border-radius: 12px 0 0 12px; }
-.seg button:last-child { border-radius: 0 12px 12px 0; border-left: 0; }
+/* ---------- Convert ---------- */
+.cpanel {
+  background: #fff; border-radius: 20px; padding: 20px 22px; margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.06);
+}
+.conv-in { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.conv-in input { width: 160px; padding: 12px 14px; border: 2px solid #e6dccd; border-radius: 14px; margin-right: 10px; -webkit-appearance: none; }
+.conv-in select { padding: 12px 14px; border-radius: 14px; border: 2px solid #e6dccd; background: #fff; }
+.seg { display: inline-flex; display: -webkit-inline-flex; background: #f1e8da; border-radius: 14px; padding: 4px; margin-bottom: 16px; }
+.seg button { border: 0; background: none; padding: 10px 24px; font-weight: 600; font-size: 18px; border-radius: 11px; }
+.seg button.on { background: #1f2b24; color: #fff; }
 table { width: 100%; border-collapse: collapse; font-size: 19px; }
-td, th { padding: 9px 8px; border-bottom: 1px solid #eee5d8; text-align: left; }
-th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #8a7d6d; }
-.conv-out td:first-child { font-weight: 700; font-size: 24px; width: 30%; }
+td, th { padding: 10px 8px; border-bottom: 1px solid #f1eadf; text-align: left; }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a8b78; }
+.conv-out td:first-child { font-weight: 300; font-size: 30px; width: 34%; }
+.gas { display: inline-block; width: 34px; height: 34px; border-radius: 17px; color: #fff; text-align: center; line-height: 34px; font-weight: 700; font-size: 17px; }
 
-/* Alarm */
+/* ---------- Alarm + toast ---------- */
 #alarm {
   display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50;
-  background: #e8a33d; text-align: center; padding-top: 18%;
+  background: #e09a2d; text-align: center; padding-top: 16%; color: #fff;
 }
-#alarm.on { display: block; -webkit-animation: flash 1s infinite; animation: flash 1s infinite; }
+#alarm.on { display: block; -webkit-animation: flash 1.2s infinite; animation: flash 1.2s infinite; }
 @-webkit-keyframes flash { 50% { background: #c4472f; } }
 @keyframes flash { 50% { background: #c4472f; } }
-#alarm-label { font-size: 56px; font-weight: 800; color: #2b2622; }
-#alarm-sub { font-size: 26px; margin: 10px 0 40px 0; }
-#alarm button { background: #2b2622; color: #fff; border: 0; border-radius: 22px; padding: 30px 70px; font-size: 32px; font-weight: 700; }
+#alarm-icon { font-size: 90px; line-height: 1; }
+#alarm-label { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 58px; font-weight: 700; margin-top: 14px; }
+#alarm-sub { font-size: 26px; margin: 8px 0 44px 0; opacity: 0.9; }
+#alarm button { background: #fff; color: #2a2420; border: 0; border-radius: 26px; padding: 30px 80px; font-size: 32px; font-weight: 800; }
 #toast {
-  display: none; position: fixed; left: 50%; bottom: 30px; width: 320px; margin-left: -160px; z-index: 60;
-  background: #2b2622; color: #fff; text-align: center; border-radius: 14px; padding: 14px; font-size: 18px;
+  display: none; position: fixed; left: 50%; bottom: 30px; width: 340px; margin-left: -170px; z-index: 60;
+  background: #1f2b24; color: #fff; text-align: center; border-radius: 16px; padding: 15px; font-size: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 </style>
 </head>
 <body>
 
 <div id="top">
-  <div id="top-row"><div id="brand">Kitchen</div><div id="clock"></div></div>
+  <div id="top-row">
+    <div><div id="greet">Hello</div><div id="date"></div></div>
+    <div id="clock"></div>
+  </div>
   <div id="tabs">
     <button class="tab on" data-tab="recipes">Recipes</button>
     <button class="tab" data-tab="timers">Timers<span id="tbadge"></span></button>
@@ -198,7 +267,10 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
 <div id="main">
   <!-- Recipe list -->
   <div class="view on" id="view-recipes">
-    <input id="search" type="text" placeholder="Search recipes or ingredients" autocomplete="off" autocorrect="off">
+    <div class="searchwrap">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9a8b78" stroke-width="2.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><line x1="16" y1="16" x2="21.5" y2="21.5"/></svg>
+      <input id="search" type="text" placeholder="Search recipes or ingredients" autocomplete="off" autocorrect="off">
+    </div>
     <div id="cats"></div>
     <div id="list"></div>
     <div id="listfoot"><span id="rcount"></span> &middot; <button class="linkbtn" id="refresh">Check for new recipes</button></div>
@@ -206,49 +278,55 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
 
   <!-- Recipe detail -->
   <div class="view" id="view-recipe">
-    <button class="back" id="r-back">&lsaquo; All recipes</button>
-    <h1 id="r-title"></h1>
-    <div id="r-meta"></div>
-    <div id="r-sum"></div>
+    <button class="back" id="r-back">&lsaquo;&nbsp; All recipes</button>
+    <div id="hero">
+      <div id="hero-art"></div>
+      <div>
+        <h1 id="r-title"></h1>
+        <div id="r-sum"></div>
+        <div id="r-meta"></div>
+      </div>
+    </div>
     <div class="toolbar">
       <div class="serves">
         <button class="round" id="s-minus">&minus;</button>
         <span id="s-val"></span>
         <button class="round" id="s-plus">+</button>
       </div>
-      <button class="big" id="cook-start">Cook step by step</button>
+      <button class="big" id="cook-start">Cook step by step &rsaquo;</button>
     </div>
     <div class="cols">
-      <div class="col-ing"><h3>Ingredients</h3><div id="r-ing"></div></div>
+      <div class="col-ing"><h3>Ingredients</h3><div class="panel" id="r-ing"></div></div>
       <div class="col-steps"><h3>Method</h3><div id="r-steps"></div><div id="r-notes"></div></div>
     </div>
   </div>
 
   <!-- Timers -->
   <div class="view" id="view-timers">
+    <h3>Running</h3>
     <div id="tlist"></div>
     <h3>Quick start</h3>
     <div class="presets" id="presets"></div>
     <div class="custom">
       <input id="c-min" type="number" min="0" value="12" pattern="[0-9]*"> min
       <input id="c-sec" type="number" min="0" max="59" value="0" pattern="[0-9]*"> sec
-      <button class="big" id="c-go">Start</button>
+      <button class="big" id="c-go">Start timer</button>
     </div>
-    <div class="hint">Turn the iPad volume up and make sure the side switch isn't on silent, or alarms will only flash. Set Settings &rsaquo; Display &amp; Brightness &rsaquo; Auto-Lock to Never so the screen stays on.</div>
+    <div class="hint">Turn the volume up and check the side switch isn&rsquo;t on silent, or alarms will only flash.</div>
   </div>
 
   <!-- Convert -->
   <div class="view" id="view-convert">
-    <div class="panel">
+    <div class="cpanel">
       <div class="seg" id="cseg"><button data-k="weight" class="on">Weight</button><button data-k="volume">Volume</button></div>
       <div class="conv-in"><input id="cv-amt" type="number" value="100" step="any"><select id="cv-unit"></select></div>
       <table class="conv-out"><tbody id="cv-out"></tbody></table>
     </div>
-    <div class="panel">
+    <div class="cpanel">
       <h3>Oven temperatures</h3>
       <table><thead><tr><th>Gas</th><th>&deg;C</th><th>Fan &deg;C</th><th>&deg;F</th><th></th></tr></thead><tbody id="oven"></tbody></table>
     </div>
-    <div class="panel">
+    <div class="cpanel">
       <h3>1 US cup in grams</h3>
       <table><tbody id="cups"></tbody></table>
     </div>
@@ -258,14 +336,15 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
 <!-- Cook mode -->
 <div id="cook">
   <div id="cook-top"><div id="cook-name"></div><button id="cook-close">Close</button></div>
+  <div id="cook-dots"></div>
   <div id="cook-count"></div>
   <div id="cook-text"></div>
   <div id="cook-timer"></div>
   <div id="cook-timers"></div>
-  <div id="cook-nav"><button id="cook-prev">&lsaquo; Back</button><button id="cook-next">Next &rsaquo;</button></div>
+  <div id="cook-nav"><button id="cook-prev">&lsaquo;&nbsp; Back</button><button id="cook-next">Next &nbsp;&rsaquo;</button></div>
 </div>
 
-<div id="alarm"><div id="alarm-label"></div><div id="alarm-sub">Time&rsquo;s up</div><button id="alarm-stop">Stop</button></div>
+<div id="alarm"><div id="alarm-icon">&#9200;</div><div id="alarm-label"></div><div id="alarm-sub">Time&rsquo;s up</div><button id="alarm-stop">Stop</button></div>
 <div id="toast"></div>
 
 <script src="recipes.js"></script>
@@ -288,8 +367,34 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
     clearTimeout(toast._t); toast._t = setTimeout(function () { t.style.display = "none"; }, 2500);
   }
 
-  /* ---------- clock ---------- */
-  function clock() { var d = new Date(); $("clock").innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+  /* ---------- category colours ---------- */
+  var PALETTE = [
+    { fg: "#b8492f", bg: "#f7ddd3", emoji: "🍲" },
+    { fg: "#6d7f2e", bg: "#e7ecd0", emoji: "🥗" },
+    { fg: "#c98411", bg: "#f9e6c4", emoji: "🧁" },
+    { fg: "#a8476a", bg: "#f5dbe4", emoji: "🍳" },
+    { fg: "#3f7a8c", bg: "#d8e9ee", emoji: "🐟" },
+    { fg: "#6b5aa6", bg: "#e4def4", emoji: "🍛" },
+    { fg: "#4d7d5c", bg: "#d9e8dc", emoji: "🍽" }
+  ];
+  var KNOWN = { "Mains": 0, "Soups": 1, "Baking": 2, "Breakfast": 3, "Fish": 4, "Curries": 5, "Sides": 1, "Desserts": 3, "Salads": 1 };
+  function theme(category) {
+    var c = category || "";
+    if (KNOWN.hasOwnProperty(c)) return PALETTE[KNOWN[c]];
+    var h = 0; for (var i = 0; i < c.length; i++) h = (h * 31 + c.charCodeAt(i)) % 997;
+    return PALETTE[h % PALETTE.length];
+  }
+  function emojiFor(r) { return r.emoji || theme(r.category).emoji; }
+
+  /* ---------- clock + greeting ---------- */
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function clock() {
+    var d = new Date(), h = d.getHours();
+    $("clock").innerHTML = pad(h) + ":" + pad(d.getMinutes());
+    $("greet").innerHTML = h < 12 ? "Good morning" : (h < 18 ? "Good afternoon" : "Good evening");
+    $("date").innerHTML = DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()];
+  }
   clock(); setInterval(clock, 5000);
 
   /* ---------- tabs ---------- */
@@ -359,11 +464,14 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
       if (cat !== "All" && r.category !== cat) return;
       if (!matches(r, q)) return;
       n++;
-      h += '<button class="card" data-id="' + esc(r.id) + '"><div class="card-title">' + esc(r.title) + '</div>' +
-        '<div class="card-meta">' + esc(r.category || "") + (r.time ? " &middot; " + esc(r.time) : "") + " &middot; serves " + r.serves + "</div>" +
-        (r.summary ? '<div class="card-sum">' + esc(r.summary) + "</div>" : "") + "</button>";
+      var t = theme(r.category);
+      h += '<button class="card" data-id="' + esc(r.id) + '">' +
+        '<div class="card-art" style="background:' + t.bg + '">' + esc(emojiFor(r)) + "</div>" +
+        '<div class="card-body"><div class="card-title">' + esc(r.title) + "</div>" +
+        '<div class="card-meta" style="color:' + t.fg + '">' + esc(r.category || "") + (r.time ? " &middot; " + esc(r.time) : "") + "</div>" +
+        (r.summary ? '<div class="card-sum">' + esc(r.summary) + "</div>" : "") + "</div></button>";
     });
-    $("list").innerHTML = n ? h : '<div class="empty">No recipes match.</div>';
+    $("list").innerHTML = n ? h : '<div class="empty">No recipes match that search.</div>';
     $("rcount").innerHTML = recipes.length + " recipe" + (recipes.length === 1 ? "" : "s");
     each($("list").querySelectorAll(".card"), function (b) { tap(b, function () { showRecipe(b.getAttribute("data-id")); }); });
   }
@@ -373,11 +481,19 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
     var r = byId(id); if (!r) return;
     openRecipe = r; serves = r.serves || 4; curStep = -1;
     checked = load("checked_" + r.id, {});
-    $("r-title").innerHTML = esc(r.title);
-    $("r-meta").innerHTML = esc(r.category || "") + (r.time ? " &middot; " + esc(r.time) : "");
-    $("r-sum").innerHTML = esc(r.summary || "");
+    renderHero();
     renderRecipe();
     showTab("recipes");
+  }
+  function renderHero() {
+    var r = openRecipe, t = theme(r.category);
+    $("hero").style.background = t.bg;
+    $("hero-art").innerHTML = esc(emojiFor(r));
+    $("r-title").innerHTML = esc(r.title);
+    $("r-sum").innerHTML = esc(r.summary || "");
+    $("r-meta").innerHTML = (r.category ? '<span class="pill" style="color:' + t.fg + '">' + esc(r.category) + "</span>" : "") +
+      (r.time ? '<span class="pill">&#9201; ' + esc(r.time) + "</span>" : "") +
+      '<span class="pill">' + (r.steps || []).length + " steps</span>";
   }
   function closeRecipe() { openRecipe = null; showTab("recipes"); }
   tap($("r-back"), closeRecipe);
@@ -393,31 +509,35 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
     return (m ? m + " min" : "") + (sec ? (m ? " " : "") + sec + " sec" : "");
   }
   function renderRecipe() {
-    var r = openRecipe, h = "";
+    var r = openRecipe, h = "", t = theme(r.category);
     $("s-val").innerHTML = "Serves " + serves;
     each(r.ingredients || [], function (i, n) {
-      h += '<button class="ing' + (checked[n] ? " done" : "") + '" data-n="' + n + '">' + ingText(i) + "</button>";
+      h += '<button class="ing' + (checked[n] ? " done" : "") + (i.text ? " note" : "") + '" data-n="' + n + '">' + ingText(i) + "</button>";
     });
     $("r-ing").innerHTML = h;
     each($("r-ing").querySelectorAll(".ing"), function (b) {
       tap(b, function () {
         var n = b.getAttribute("data-n"); checked[n] = !checked[n];
-        b.className = "ing" + (checked[n] ? " done" : ""); store("checked_" + r.id, checked);
+        b.className = b.className.replace(/ done/g, "") + (checked[n] ? " done" : ""); store("checked_" + r.id, checked);
       });
     });
     h = "";
     each(r.steps || [], function (s, n) {
-      h += '<div class="step' + (n === curStep ? " cur" : "") + '" data-n="' + n + '"><div class="step-n">' + (n + 1) + "</div>" + esc(s.t) +
-        (s.timer ? '<div><button class="tbtn" data-n="' + n + '">&#9201; Start ' + fmtDur(s.timer) + " timer</button></div>" : "") + "</div>";
+      h += '<div class="step" data-n="' + n + '"' + (n === curStep ? ' style="border-color:' + t.fg + '"' : "") + '>' +
+        '<div class="step-n" style="color:' + t.fg + '">' + (n + 1) + "</div>" + esc(s.t) +
+        (s.timer ? '<div><button class="tbtn" data-n="' + n + '">&#9201;&nbsp; Start ' + fmtDur(s.timer) + " timer</button></div>" : "") + "</div>";
     });
     $("r-steps").innerHTML = h;
     each($("r-steps").querySelectorAll(".step"), function (d) {
-      tap(d, function () { curStep = +d.getAttribute("data-n"); each($("r-steps").querySelectorAll(".step"), function (x) { x.className = "step" + (x === d ? " cur" : ""); }); });
+      tap(d, function () {
+        curStep = +d.getAttribute("data-n");
+        each($("r-steps").querySelectorAll(".step"), function (x) { x.style.borderColor = x === d ? t.fg : "transparent"; });
+      });
     });
     each($("r-steps").querySelectorAll(".tbtn"), function (b) {
       tap(b, function (e) { e.stopPropagation(); stepTimer(r, +b.getAttribute("data-n")); });
     });
-    $("r-notes").innerHTML = r.notes ? '<div class="notes"><b>Notes:</b> ' + esc(r.notes) + "</div>" : "";
+    $("r-notes").innerHTML = r.notes ? '<div class="notes"><b>Tip:</b> ' + esc(r.notes) + "</div>" : "";
   }
   tap($("s-minus"), function () { if (serves > 1) { serves--; renderRecipe(); } });
   tap($("s-plus"), function () { if (serves < 40) { serves++; renderRecipe(); } });
@@ -430,21 +550,23 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
 
   /* ---------- cook mode ---------- */
   function renderCook() {
-    var r = openRecipe, s = r.steps[curStep];
-    $("cook-name").innerHTML = esc(r.title);
+    var r = openRecipe, s = r.steps[curStep], d = "";
+    $("cook-name").innerHTML = esc(emojiFor(r)) + "&nbsp; " + esc(r.title);
+    each(r.steps, function (x, n) { d += '<span class="dot' + (n <= curStep ? " on" : "") + '"></span>'; });
+    $("cook-dots").innerHTML = d;
     $("cook-count").innerHTML = "Step " + (curStep + 1) + " of " + r.steps.length;
     $("cook-text").innerHTML = esc(s.t);
-    $("cook-timer").innerHTML = s.timer ? '<button class="tbtn" id="cook-t">&#9201; Start ' + fmtDur(s.timer) + " timer</button>" : "";
+    $("cook-timer").innerHTML = s.timer ? '<button class="tbtn" id="cook-t">&#9201;&nbsp; Start ' + fmtDur(s.timer) + " timer</button>" : "";
     if (s.timer) tap($("cook-t"), function () { stepTimer(r, curStep); });
     $("cook-prev").style.visibility = curStep > 0 ? "visible" : "hidden";
-    $("cook-next").innerHTML = curStep < r.steps.length - 1 ? "Next &rsaquo;" : "Done";
+    $("cook-next").innerHTML = curStep < r.steps.length - 1 ? "Next &nbsp;&rsaquo;" : "Finished &#10003;";
     renderCookTimers();
   }
   function renderCookTimers() {
     if (!$("cook").className) return;
     var h = [];
-    each(timers, function (t) { if (!t.done) h.push(esc(t.label) + " " + fmtLeft(t)); });
-    $("cook-timers").innerHTML = h.length ? "&#9201; " + h.join(" &nbsp;&middot;&nbsp; ") : "";
+    each(timers, function (t) { if (!t.done) h.push(esc(t.label) + " <b>" + fmtLeft(t) + "</b>"); });
+    $("cook-timers").innerHTML = h.length ? "&#9201;&nbsp; " + h.join(" &nbsp;&middot;&nbsp; ") : "";
   }
   tap($("cook-start"), function () { if (curStep < 0) curStep = 0; $("cook").className = "on"; renderCook(); });
   tap($("cook-close"), function () { $("cook").className = ""; renderRecipe(); });
@@ -485,6 +607,7 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
   }
 
   /* ---------- timers ---------- */
+  var RC = 2 * Math.PI * 52; // ring circumference
   var timers = load("timers", []), tid = 1;
   each(timers, function (t) { if (t.id >= tid) tid = t.id + 1; });
   function left(t) { return t.paused ? t.remaining : Math.max(0, Math.round((t.end - Date.now()) / 1000)); }
@@ -492,6 +615,7 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
     var s = left(t), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
     return (h ? h + ":" + pad(m) : m) + ":" + pad(sec);
   }
+  function ringOffset(t) { return (RC * (1 - (t.dur ? left(t) / t.dur : 0))).toFixed(1); }
   function saveTimers() { store("timers", timers); }
   function addTimer(secs, label) {
     timers.push({ id: tid++, label: label, dur: secs, end: Date.now() + secs * 1000, paused: false, remaining: secs, done: false });
@@ -505,17 +629,23 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
   function renderTimers() {
     var h = "";
     each(timers, function (t) {
-      h += '<div class="timer' + (t.done ? " ringing" : "") + '"><div class="timer-left" id="tl' + t.id + '">' + fmtLeft(t) + "</div>" +
-        '<div class="timer-label">' + esc(t.label) + "</div><div class=\"timer-btns\">" +
+      var col = t.done ? "#c4472f" : (t.paused ? "#b9ad9e" : "#e09a2d");
+      h += '<div class="timer' + (t.done ? " ringing" : "") + '">' +
+        '<div class="ring"><svg width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="#f1e8da" stroke-width="9"/>' +
+        '<circle id="tr' + t.id + '" cx="60" cy="60" r="52" fill="none" stroke="' + col + '" stroke-width="9" stroke-linecap="round" ' +
+        'stroke-dasharray="' + RC.toFixed(1) + '" stroke-dashoffset="' + ringOffset(t) + '"/></svg>' +
+        '<div class="ring-txt" id="tl' + t.id + '">' + fmtLeft(t) + "</div></div>" +
+        '<div class="timer-label">' + esc(t.label) + '<div class="timer-state">' + (t.done ? "Finished" : (t.paused ? "Paused" : "of " + fmtDur(t.dur))) + "</div></div>" +
+        '<div class="timer-btns">' +
         (t.done ? "" : '<button data-a="add" data-id="' + t.id + '">+1 min</button><button data-a="pause" data-id="' + t.id + '">' + (t.paused ? "Resume" : "Pause") + "</button>") +
-        '<button data-a="del" data-id="' + t.id + '">' + (t.done ? "Dismiss" : "Cancel") + "</button></div></div>";
+        '<button class="stop" data-a="del" data-id="' + t.id + '">' + (t.done ? "Dismiss" : "Cancel") + "</button></div></div>";
     });
-    $("tlist").innerHTML = h;
+    $("tlist").innerHTML = h || '<div class="noTimers">No timers running. Tap a time below to start one.</div>';
     each($("tlist").querySelectorAll("button"), function (b) {
       tap(b, function () {
         var t = findTimer(+b.getAttribute("data-id")), a = b.getAttribute("data-a"); if (!t) return;
         if (a === "del") { removeTimer(t.id); return; }
-        if (a === "add") { if (t.paused) t.remaining += 60; else t.end += 60000; }
+        if (a === "add") { t.dur += 60; if (t.paused) t.remaining += 60; else t.end += 60000; }
         if (a === "pause") {
           if (t.paused) { t.end = Date.now() + t.remaining * 1000; t.paused = false; }
           else { t.remaining = left(t); t.paused = true; }
@@ -523,7 +653,6 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
         saveTimers(); renderTimers();
       });
     });
-    var active = 0; each(timers, function (t) { if (!t.done) active++; });
     $("tbadge").innerHTML = timers.length ? '<span class="badge">' + timers.length + "</span>" : "";
     renderCookTimers();
   }
@@ -540,6 +669,7 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
     each(timers, function (t) {
       if (!t.done && !t.paused && left(t) <= 0) { t.done = true; changed = true; }
       var el = $("tl" + t.id); if (el) el.innerHTML = fmtLeft(t);
+      var rg = $("tr" + t.id); if (rg) rg.setAttribute("stroke-dashoffset", ringOffset(t));
     });
     if (changed) { saveTimers(); renderTimers(); checkAlarm(); }
     if (ringing) beep();
@@ -547,18 +677,21 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
   }
   setInterval(tick, 1000);
 
-  var PRESETS = [1, 2, 3, 5, 8, 10, 12, 15, 20, 25, 30, 45, 60, 90];
+  var PRESETS = [1, 2, 3, 5, 8, 10, 12, 15, 20, 25, 30, 45, 60, 75, 90, 120];
   (function () {
     var h = "";
-    each(PRESETS, function (m) { h += '<button class="preset" data-m="' + m + '">' + (m >= 60 ? (m / 60) + " hr" : m + " min") + "</button>"; });
+    each(PRESETS, function (m) {
+      var big = m >= 60 && m % 60 === 0 ? m / 60 : (m >= 60 ? (Math.round(m / 6) / 10) : m);
+      h += '<button class="preset" data-m="' + m + '"><b>' + big + "</b><span>" + (m >= 60 ? (m === 60 ? "hour" : "hours") : "min") + "</span></button>";
+    });
     $("presets").innerHTML = h;
     each($("presets").querySelectorAll(".preset"), function (b) {
-      tap(b, function () { var m = +b.getAttribute("data-m"); addTimer(m * 60, (m >= 60 ? (m / 60) + " hr" : m + " min") + " timer"); });
+      tap(b, function () { var m = +b.getAttribute("data-m"); addTimer(m * 60, fmtDur(m * 60) + " timer"); toast(fmtDur(m * 60) + " timer started"); });
     });
   })();
   tap($("c-go"), function () {
     var m = parseInt($("c-min").value, 10) || 0, s = parseInt($("c-sec").value, 10) || 0, tot = m * 60 + s;
-    if (tot > 0) addTimer(tot, fmtDur(tot) + " timer");
+    if (tot > 0) { addTimer(tot, fmtDur(tot) + " timer"); toast(fmtDur(tot) + " timer started"); }
   });
 
   /* ---------- converter ---------- */
@@ -600,12 +733,17 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
       ["3", 160, 140, 325, "Warm"], ["4", 180, 160, 350, "Moderate"], ["5", 190, 170, 375, "Mod. hot"], ["6", 200, 180, 400, "Hot"],
       ["7", 220, 200, 425, "Hot"], ["8", 230, 210, 450, "Very hot"], ["9", 240, 220, 475, "Very hot"]];
     var h = "";
-    each(OV, function (o) { h += "<tr><td><b>" + o[0] + "</b></td><td>" + o[1] + "</td><td>" + o[2] + "</td><td>" + o[3] + "</td><td>" + o[4] + "</td></tr>"; });
+    each(OV, function (o, i) {
+      // colour shifts from cool blue to hot red
+      var hue = Math.round(210 - (i / (OV.length - 1)) * 205);
+      h += '<tr><td><span class="gas" style="background:hsl(' + hue + ',55%,52%)">' + o[0] + "</span></td><td>" + o[1] + "</td><td>" + o[2] + "</td><td>" + o[3] +
+        '</td><td style="color:#9a8b78">' + o[4] + "</td></tr>";
+    });
     $("oven").innerHTML = h;
     var CU = [["Plain / self-raising flour", 125], ["Caster or granulated sugar", 200], ["Brown sugar (packed)", 220], ["Icing sugar", 120],
       ["Butter", 225], ["Rolled oats", 90], ["Rice (uncooked)", 185], ["Grated cheese", 100], ["Honey / golden syrup", 340]];
     h = "";
-    each(CU, function (c) { h += "<tr><td>" + c[0] + "</td><td><b>" + c[1] + "g</b></td></tr>"; });
+    each(CU, function (c) { h += "<tr><td>" + c[0] + '</td><td style="text-align:right"><b>' + c[1] + "g</b></td></tr>"; });
     $("cups").innerHTML = h;
   })();
 
@@ -613,7 +751,7 @@ th { font-size: 15px; text-transform: uppercase; letter-spacing: 0.6px; color: #
   function applyRecipes() {
     recipes = getRecipes();
     renderCats(); renderList();
-    if (openRecipe) { var r = byId(openRecipe.id); if (r) { openRecipe = r; renderRecipe(); } }
+    if (openRecipe) { var r = byId(openRecipe.id); if (r) { openRecipe = r; renderHero(); renderRecipe(); } }
   }
   function reloadRecipes(manual) {
     var old = document.getElementById("recipes-js"), s = document.createElement("script"), before = recipes.length;

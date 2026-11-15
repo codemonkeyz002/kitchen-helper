@@ -1,5 +1,6 @@
 /* Kitchen Helper recipe book.
    To add a recipe, copy one block below and edit it.
+   emoji: one emoji shown on the recipe card (optional)
    Ingredient: { q: amount (number, scales with servings), u: "unit", n: "name" }
                or { text: "something that doesn't scale" }
    Step:       { t: "instruction", timer: seconds (optional), label: "timer name" (optional) }
@@ -7,6 +8,7 @@
 window.KITCHEN_RECIPES = [
   {
     id: "bolognese",
+    emoji: "🍝",
     title: "Weeknight Spaghetti Bolognese",
     category: "Mains",
     serves: 4,
@@ -39,6 +41,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "leek-potato-soup",
+    emoji: "🥣",
     title: "Leek & Potato Soup",
     category: "Soups",
     serves: 4,
@@ -63,6 +66,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "victoria-sponge",
+    emoji: "🍰",
     title: "Victoria Sponge",
     category: "Baking",
     serves: 8,
@@ -92,6 +96,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "banana-bread",
+    emoji: "🍌",
     title: "Easy Banana Bread",
     category: "Baking",
     serves: 10,
@@ -118,6 +123,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "roast-chicken",
+    emoji: "🍗",
     title: "Simple Roast Chicken",
     category: "Mains",
     serves: 4,
@@ -144,6 +150,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "pancakes",
+    emoji: "🥞",
     title: "Thin British Pancakes",
     category: "Breakfast",
     serves: 4,
