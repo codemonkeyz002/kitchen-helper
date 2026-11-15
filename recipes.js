@@ -58,7 +58,7 @@ window.KITCHEN_RECIPES = [
     tags: ["Lunch", "Dinner", "Vegetarian", "One pot", "Freezer friendly", "Budget"],
     minutes: 40,
     effort: 1,
-    emoji: "🥣",
+    emoji: "🍲",
     title: "Leek & Potato Soup",
     category: "Soups",
     serves: 4,
