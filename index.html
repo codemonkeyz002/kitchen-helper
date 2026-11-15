@@ -336,6 +336,29 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
 #share-btns .big, #share-btns a.big { margin-right: 10px; text-decoration: none; display: inline-block; }
 #share-btns .ghost { background: #f1e8da; color: #2a2420; box-shadow: none; }
 #share-close { margin-left: auto; }
+/* entry code */
+#gate {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 200; background: #1f2b24; color: #fff;
+  text-align: center; padding-top: 70px;
+}
+#gate.off { display: none; }
+#gate-title { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 40px; }
+#gate-sub { color: #a9b8ad; font-size: 19px; margin-top: 6px; }
+#gate-dots { margin: 34px 0 30px 0; height: 26px; }
+#gate-dots span {
+  display: inline-block; width: 22px; height: 22px; border-radius: 11px; border: 2px solid #c2cec5; margin: 0 11px;
+}
+#gate-dots span.on { background: #e09a2d; border-color: #e09a2d; }
+#gate-dots.shake { -webkit-animation: shake 0.4s; animation: shake 0.4s; }
+@-webkit-keyframes shake { 20%, 60% { -webkit-transform: translateX(-14px); } 40%, 80% { -webkit-transform: translateX(14px); } }
+@keyframes shake { 20%, 60% { transform: translateX(-14px); } 40%, 80% { transform: translateX(14px); } }
+#gate-pad { width: 330px; margin: 0 auto; overflow: hidden; }
+#gate-pad button {
+  float: left; width: 90px; height: 90px; border-radius: 45px; margin: 0 10px 18px 10px; border: 0;
+  background: rgba(255,255,255,0.12); color: #fff; font-size: 36px; font-weight: 300; padding: 0;
+}
+#gate-pad button.blank { visibility: hidden; }
+#gate-pad button.del { background: none; font-size: 22px; font-weight: 600; }
 #toast {
   display: none; position: fixed; left: 50%; bottom: 30px; width: 340px; margin-left: -170px; z-index: 60;
   background: #1f2b24; color: #fff; text-align: center; border-radius: 16px; padding: 15px; font-size: 18px;
@@ -465,6 +488,12 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   </div>
 </div>
 <div id="toast"></div>
+<div id="gate">
+  <div id="gate-title">Kitchen</div>
+  <div id="gate-sub">Enter the code to continue</div>
+  <div id="gate-dots"><span></span><span></span><span></span><span></span></div>
+  <div id="gate-pad"></div>
+</div>
 
 <script>
   // Always fetch the latest recipe book rather than a cached copy
@@ -507,6 +536,51 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     return PALETTE[h % PALETTE.length];
   }
   function emojiFor(r) { return r.emoji || theme(r.category).emoji; }
+
+  /* ---------- entry code ---------- */
+  // Keeps casual visitors out. Only a scrambled version of the code is stored here.
+  var CODE_HASH = "4225120703", CODE_LEN = 4;
+  function fnv(s) {
+    var h = 0x811c9dc5, i;
+    for (i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0; }
+    return h >>> 0;
+  }
+  function codeHash(c) {
+    var h = String(fnv("kitchen-helper:" + c)), i;
+    for (i = 0; i < 2000; i++) h = String(fnv(h + ":" + c));
+    return h;
+  }
+  (function () {
+    var gate = $("gate");
+    if (load("unlocked", "") === CODE_HASH) { gate.className = "off"; return; }
+    var entered = "", keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "del"], h = "";
+    each(keys, function (k) {
+      if (k === "") h += '<button class="blank"></button>';
+      else if (k === "del") h += '<button class="del" data-k="del">Delete</button>';
+      else h += '<button data-k="' + k + '">' + k + "</button>";
+    });
+    $("gate-pad").innerHTML = h;
+    function dots() {
+      each($("gate-dots").querySelectorAll("span"), function (d, i) { d.className = i < entered.length ? "on" : ""; });
+    }
+    each($("gate-pad").querySelectorAll("button[data-k]"), function (b) {
+      tap(b, function () {
+        var k = b.getAttribute("data-k");
+        if (k === "del") { entered = entered.slice(0, -1); dots(); return; }
+        if (entered.length >= CODE_LEN) return;
+        entered += k; dots();
+        if (entered.length === CODE_LEN) {
+          setTimeout(function () {
+            if (codeHash(entered) === CODE_HASH) { store("unlocked", CODE_HASH); gate.className = "off"; }
+            else {
+              var d = $("gate-dots"); d.className = "shake";
+              setTimeout(function () { d.className = ""; entered = ""; dots(); }, 450);
+            }
+          }, 150);
+        }
+      });
+    });
+  })();
 
   /* ---------- clock + greeting ---------- */
   var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
