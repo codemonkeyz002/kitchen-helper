@@ -726,12 +726,22 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   tap($("r-back"), closeRecipe);
 
   // "onion, chopped" -> "onions, chopped" when there's more than one
+  // Split "chicken (thighs, legs), diced" at the first comma that isn't inside brackets
+  function headOf(n) {
+    var depth = 0, i, c;
+    for (i = 0; i < n.length; i++) {
+      c = n.charAt(i);
+      if (c === "(") depth++;
+      else if (c === ")") depth--;
+      else if (c === "," && depth <= 0) return [n.slice(0, i), n.slice(i)];
+    }
+    return [n, ""];
+  }
   function plural(name, qty) {
     if (qty < 1.5) return name;
-    var parts = name.split(","), first = parts[0];
-    if (!/s$/.test(first)) first = /(ch|sh|x)$/.test(first) ? first + "es" : first + "s";
-    parts[0] = first;
-    return parts.join(",");
+    var hr = headOf(name), m = hr[0].match(/^(.*?)(\s*\(.*\))?$/), base = m[1], br = m[2] || "";
+    if (!/s$/.test(base)) base = /(ch|sh|x|[^aeiou]o)$/.test(base) ? base + "es" : base + "s";
+    return base + br + hr[1];
   }
   function ingText(i) {
     if (i.text) return esc(i.text);
@@ -745,7 +755,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       var i = ings[+n];
       if (!i) return m;
       if (i.text) return esc(label || i.text);
-      var name = label || esc((i.u ? i.n : plural(i.n, Math.round(i.q * f))).split(",")[0].replace(/\s*\([^)]*\)/g, ""));
+      var name = label || esc(headOf(i.u ? i.n : plural(i.n, Math.round(i.q * f)))[0].replace(/\s*\([^)]*\)/g, ""));
       return '<span class="qty">' + esc(fmtQty(i.q * f, i.u)) + "</span> " + name;
     });
   }

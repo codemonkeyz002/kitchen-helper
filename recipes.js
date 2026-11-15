@@ -238,5 +238,50 @@ window.KITCHEN_RECIPES = [
       { t: "Sit the cake on the rack over a tray or baking paper. Pour the glaze onto the middle and gently push it towards the edges so it drips down the sides. Leave it to set before moving the cake.", timer: 3600, label: "Glaze setting" }
     ],
     notes: "Allow an extra 1½ hours or so for cooling and setting the glaze. Use thick yoghurt (or sour cream), as fat-free yoghurt is too thin. Some 20cm tins are too shallow and overflow, so use a deep or springform tin. Keeps 5 days in an airtight tin. For a cream cheese frosting instead of the glaze, beat 200g spreadable cream cheese with 240g icing sugar and 2 tbsp lemon juice. Original recipe: recipetineats.com/lemon-cake"
+  },
+  {
+    id: "chicken-machboos",
+    tags: ["Dinner", "Chicken", "One pot", "Freezer friendly", "Weekend"],
+    minutes: 115,
+    effort: 2,
+    emoji: "🍚",
+    title: "Chicken Machboos (Bahraini Chicken & Rice)",
+    category: "Mains",
+    serves: 6,
+    time: "1 hr 55 min",
+    summary: "Fragrant one-pot spiced chicken and basmati rice with dried limes. Based on The Daring Gourmet.",
+    ingredients: [
+      { q: 1.4, u: "kg", n: "chicken pieces on the bone (mix of thighs, drumsticks and breast)" },
+      { q: 375, u: "g", n: "basmati rice" },
+      { q: 2, u: "tbsp", n: "vegetable oil" },
+      { q: 600, u: "ml", n: "chicken stock" },
+      { q: 2, u: "", n: "large onion, diced" },
+      { q: 3, u: "tbsp", n: "ghee or butter" },
+      { q: 1, u: "tbsp", n: "fresh ginger, finely chopped" },
+      { q: 5, u: "", n: "garlic clove, thinly sliced" },
+      { q: 1, u: "", n: "green chilli, deseeded and diced (optional)" },
+      { q: 1, u: "tbsp", n: "baharat spice mix" },
+      { q: 1, u: "tsp", n: "ground turmeric" },
+      { q: 2, u: "", n: "large tomato, diced (or a 400g tin, drained)" },
+      { q: 2, u: "", n: "dried lime (loomi)" },
+      { q: 5, u: "", n: "green cardamom pod" },
+      { q: 1, u: "", n: "cinnamon stick" },
+      { text: "Pinch of ground cloves" },
+      { q: 2.5, u: "tsp", n: "salt" },
+      { q: 3, u: "tbsp", n: "fresh coriander, chopped" },
+      { q: 2, u: "tbsp", n: "fresh parsley, chopped" },
+      { q: 1, u: "tbsp", n: "rose water (optional)" },
+      { text: "Green salad and cucumber raita to serve" }
+    ],
+    steps: [
+      { t: "Soak {1} in cold water for at least 15 minutes, then rinse well and drain.", timer: 900, label: "Soak rice" },
+      { t: "Heat {2} in a large, deep pan with a lid over a medium-high heat. Brown {0} well on both sides until golden and crisp (in batches if needed), then lift out onto a plate.", timer: 600, label: "Brown chicken" },
+      { t: "Turn the heat down to medium. Add {5} and {4} and fry until the onions are soft and just starting to brown.", timer: 660, label: "Fry onions" },
+      { t: "Add {6}, {7} and {8} and cook for 2 minutes. Stir in {9} and {10} and cook for 1 minute more.", timer: 180, label: "Spices" },
+      { t: "Pierce {12} a few times with a sharp knife. Put the chicken back in the pan with the limes, {11}, {13}, {14}, a pinch of ground cloves, {16} and {3}. Bring to the boil, then cover, turn the heat to low and simmer.", timer: 3600, label: "Simmer chicken" },
+      { t: "Stir in {17}, {18} and the drained rice. Bring back to the boil, then cover, turn the heat to low and cook until the rice has soaked up all the liquid.", timer: 1080, label: "Cook rice" },
+      { t: "Mix the chicken through the rice or arrange it on top, then sprinkle with {19}. Serve with a green salad and cucumber raita." }
+    ],
+    notes: "Baharat is in the world foods aisle of bigger supermarkets. To make your own, dry-toast 1 tbsp black peppercorns, 1 tbsp cumin seeds, 2 tsp coriander seeds, a cinnamon stick, 1 tsp whole cloves and ¼ tsp cardamom seeds for 3–4 minutes, cool, then grind with 1 tbsp paprika and ¼ tsp nutmeg (makes extra). Dried limes (loomi) are sold in Middle Eastern shops and online; a couple of pinches of black lime powder will do instead. Leave out the chilli to keep it mild for the kids. Keeps 3–4 days in the fridge or 3 months frozen. Original recipe: daringgourmet.com"
   }
 ];
