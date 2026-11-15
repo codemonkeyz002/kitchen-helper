@@ -3,6 +3,11 @@
    minutes: total time in minutes (used for sorting by quickest)
    effort:  1 = easy, 2 = some effort, 3 = a project
    rating / kids: optional starting star ratings 1-5 (ratings tapped on the iPad take priority)
+   tags: list of tags used for browsing. Use these where they fit:
+         Meal:  Breakfast, Lunch, Dinner, Side, Dessert, Baking, Snack
+         Main:  Beef, Chicken, Pork, Lamb, Fish, Vegetarian, Vegan
+         Style: Slow cook, One pot, Freezer friendly, Batch cook, Budget, Weekend
+         ("Quick" is added automatically for anything 30 minutes or under.)
    emoji: one emoji shown on the recipe card (optional)
    Ingredient: { q: amount (number, scales with servings), u: "unit", n: "name" }
                or { text: "something that doesn't scale" }
@@ -11,6 +16,7 @@
 window.KITCHEN_RECIPES = [
   {
     id: "bolognese",
+    tags: ["Dinner", "Beef", "Batch cook", "Freezer friendly"],
     minutes: 60,
     effort: 2,
     emoji: "🍝",
@@ -46,6 +52,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "leek-potato-soup",
+    tags: ["Lunch", "Dinner", "Vegetarian", "One pot", "Freezer friendly", "Budget"],
     minutes: 40,
     effort: 1,
     emoji: "🥣",
@@ -73,6 +80,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "victoria-sponge",
+    tags: ["Baking", "Dessert", "Vegetarian", "Weekend"],
     minutes: 50,
     effort: 2,
     emoji: "🍰",
@@ -105,6 +113,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "banana-bread",
+    tags: ["Baking", "Snack", "Vegetarian", "Freezer friendly", "Budget"],
     minutes: 75,
     effort: 1,
     emoji: "🍌",
@@ -134,6 +143,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "roast-chicken",
+    tags: ["Dinner", "Chicken", "Weekend"],
     minutes: 105,
     effort: 2,
     emoji: "🍗",
@@ -163,6 +173,7 @@ window.KITCHEN_RECIPES = [
   },
   {
     id: "pancakes",
+    tags: ["Breakfast", "Dessert", "Vegetarian", "Budget"],
     minutes: 20,
     effort: 1,
     emoji: "🥞",

@@ -57,12 +57,24 @@ h3 {
   background: #fff; -webkit-appearance: none; outline: none;
   box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 14px rgba(60,40,20,0.06);
 }
-#cats { margin: 16px 0 8px 0; }
+#cats {
+  margin: 16px 0 14px 0; background: #fff; border-radius: 20px; padding: 14px 16px 6px 16px;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 14px rgba(60,40,20,0.05);
+}
+.frow { display: flex; align-items: flex-start; }
+.flbl {
+  width: 92px; -webkit-flex-shrink: 0; flex-shrink: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1.1px;
+  color: #9a8b78; font-weight: 700; padding-top: 11px; line-height: 1.2;
+}
+.fchips { -webkit-flex: 1; flex: 1; }
 .chip {
-  display: inline-block; border: 0; background: #ece3d5; border-radius: 22px;
-  padding: 9px 18px; margin: 0 8px 10px 0; font-size: 17px; font-weight: 600; color: #5d5246;
+  display: inline-block; border: 0; background: #f1e8da; border-radius: 22px;
+  padding: 8px 16px; margin: 0 7px 8px 0; font-size: 17px; font-weight: 600; color: #5d5246;
 }
 .chip.on { background: #1f2b24; color: #fff; }
+.chip small { font-size: 13px; opacity: 0.6; margin-left: 4px; }
+.chip.clear { background: none; color: #b0702c; text-decoration: underline; padding-left: 4px; }
+.tagpill { background: rgba(255,255,255,0.5); font-weight: 600; }
 #list { display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 4px; }
 .card {
   width: 49%; width: calc(50% - 8px); text-align: left; background: #fff; border: 0;
@@ -540,18 +552,63 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   function getRecipes() { return (window.KITCHEN_RECIPES || []).slice(0); }
   function byId(id) { for (var i = 0; i < recipes.length; i++) if (recipes[i].id === id) return recipes[i]; return null; }
 
+  /* ---------- tags + browsing ---------- */
+  var TAG_GROUPS = [
+    { name: "Meal", tags: ["Breakfast", "Lunch", "Dinner", "Side", "Dessert", "Baking", "Snack"] },
+    { name: "Main", tags: ["Beef", "Chicken", "Pork", "Lamb", "Fish", "Vegetarian", "Vegan"] },
+    { name: "Style", tags: ["Quick", "Slow cook", "One pot", "Freezer friendly", "Batch cook", "Budget", "Weekend"] }
+  ];
+  var sel = {}; // selected tags
+  function tagsOf(r) {
+    var t = (r.tags || []).slice(0);
+    if (r.minutes && r.minutes <= 30 && t.indexOf("Quick") < 0) t.push("Quick");
+    if (r.category && t.indexOf(r.category) < 0 && !r.tags) t.push(r.category);
+    return t;
+  }
+  function groupOf(tag) {
+    for (var i = 0; i < TAG_GROUPS.length; i++) if (TAG_GROUPS[i].tags.indexOf(tag) >= 0) return i;
+    return TAG_GROUPS.length; // "Other"
+  }
+  // OR within a group, AND across groups
+  function passesTags(r) {
+    var t = tagsOf(r), g, want, ok, k;
+    for (g = 0; g <= TAG_GROUPS.length; g++) {
+      want = []; for (k in sel) if (sel[k] && groupOf(k) === g) want.push(k);
+      if (!want.length) continue;
+      ok = false; each(want, function (w) { if (t.indexOf(w) >= 0) ok = true; });
+      if (!ok) return false;
+    }
+    return true;
+  }
   function renderCats() {
-    var cats = ["All"];
-    each(recipes, function (r) { if (r.category && cats.indexOf(r.category) < 0) cats.push(r.category); });
-    if (cats.indexOf(cat) < 0) cat = "All";
-    var h = "";
-    each(cats, function (c) { h += '<button class="chip' + (c === cat ? " on" : "") + '" data-c="' + esc(c) + '">' + esc(c) + "</button>"; });
+    var counts = {}, other = [], h = "", any = false, k;
+    each(recipes, function (r) {
+      each(tagsOf(r), function (t) {
+        if (!counts[t]) { counts[t] = 0; if (groupOf(t) === TAG_GROUPS.length) other.push(t); }
+        counts[t]++;
+      });
+    });
+    for (k in sel) if (sel[k]) { if (!counts[k]) delete sel[k]; else any = true; }
+    var groups = TAG_GROUPS.concat(other.length ? [{ name: "Other", tags: other.sort() }] : []);
+    each(groups, function (g, gi) {
+      var chips = "";
+      each(g.tags, function (t) {
+        if (!counts[t]) return;
+        chips += '<button class="chip' + (sel[t] ? " on" : "") + '" data-t="' + esc(t) + '">' + esc(t) + "<small>" + counts[t] + "</small></button>";
+      });
+      if (gi === groups.length - 1 && any) chips += '<button class="chip clear" id="fclear">Clear filters</button>';
+      if (chips) h += '<div class="frow"><div class="flbl">' + esc(g.name) + '</div><div class="fchips">' + chips + "</div></div>";
+    });
     $("cats").innerHTML = h;
-    each($("cats").querySelectorAll(".chip"), function (b) { tap(b, function () { cat = b.getAttribute("data-c"); renderCats(); renderList(); }); });
+    $("cats").style.display = h ? "block" : "none";
+    each($("cats").querySelectorAll(".chip[data-t]"), function (b) {
+      tap(b, function () { var t = b.getAttribute("data-t"); sel[t] = !sel[t]; renderCats(); renderList(); });
+    });
+    if ($("fclear")) tap($("fclear"), function () { sel = {}; renderCats(); renderList(); });
   }
   function matches(r, q) {
     if (!q) return true;
-    var hay = (r.title + " " + (r.summary || "") + " " + (r.category || "")).toLowerCase();
+    var hay = (r.title + " " + (r.summary || "") + " " + (r.category || "") + " " + tagsOf(r).join(" ")).toLowerCase();
     each(r.ingredients || [], function (i) { hay += " " + (i.n || i.text || "").toLowerCase(); });
     var words = q.toLowerCase().split(/\s+/), ok = true;
     each(words, function (w) { if (w && hay.indexOf(w) < 0) ok = false; });
@@ -569,7 +626,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       return a.title < b.title ? -1 : 1;
     });
     each(sorted, function (r) {
-      if (cat !== "All" && r.category !== cat) return;
+      if (!passesTags(r)) return;
       if (!matches(r, q)) return;
       n++;
       var t = theme(r.category);
@@ -580,7 +637,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
         (r.summary ? '<div class="card-sum">' + esc(r.summary) + "</div>" : "") +
         '<div class="card-stats">' + cardStats(r) + "</div></div></button>";
     });
-    $("list").innerHTML = n ? h : '<div class="empty">No recipes match that search.</div>';
+    $("list").innerHTML = n ? h : '<div class="empty">No recipes match. Try removing a filter.</div>';
     $("rcount").innerHTML = recipes.length + " recipe" + (recipes.length === 1 ? "" : "s");
     each($("list").querySelectorAll(".card"), function (b) { tap(b, function () { showRecipe(b.getAttribute("data-id")); }); });
   }
@@ -612,6 +669,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     $("r-sum").innerHTML = esc(r.summary || "");
     $("r-meta").innerHTML = (r.category ? '<span class="pill" style="color:' + t.fg + '">' + esc(r.category) + "</span>" : "") +
       '<span class="pill">' + (r.steps || []).length + " steps</span>";
+    each(tagsOf(r), function (t) { if (t !== r.category) $("r-meta").innerHTML += '<span class="pill tagpill">' + esc(t) + "</span>"; });
     renderRate();
   }
   function starButtons(k, val) {
