@@ -447,7 +447,10 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
 </div>
 <div id="toast"></div>
 
-<script src="recipes.js"></script>
+<script>
+  // Always fetch the latest recipe book rather than a cached copy
+  document.write('<script id="recipes-js" src="recipes.js?v=' + new Date().getTime() + '"><\/script>');
+</script>
 <script>
 (function () {
   "use strict";
