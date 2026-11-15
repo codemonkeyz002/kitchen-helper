@@ -60,11 +60,11 @@ h3 {
 #toolsrow { display: flex; align-items: center; margin: 14px 0 14px 0; }
 .ftog {
   border: 0; background: #fff; border-radius: 14px; padding: 9px 16px; font-size: 17px; font-weight: 700; color: #2a2420;
-  box-shadow: 0 1px 2px rgba(60,40,20,0.08); display: flex; align-items: center; max-width: 70%;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.08); display: inline-block; white-space: nowrap; text-align: left;
 }
-.ftog svg { margin-right: 8px; -webkit-flex-shrink: 0; flex-shrink: 0; }
+.ftog svg { margin-right: 8px; vertical-align: -3px; }
 .ftog.active { background: #1f2b24; color: #fff; }
-#factive { font-weight: 500; margin-left: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.85; }
+#factive { font-weight: 500; margin-left: 6px; display: inline-block; max-width: 260px; vertical-align: bottom; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.85; }
 #farrow { margin-left: 8px; display: inline-block; -webkit-transition: -webkit-transform 0.2s; transition: transform 0.2s; }
 .ftog.open #farrow { -webkit-transform: rotate(180deg); transform: rotate(180deg); }
 #cats {
@@ -87,20 +87,36 @@ h3 {
 .tagpill { background: rgba(255,255,255,0.5); font-weight: 600; }
 #list { display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 4px; }
 .card {
-  width: 49%; width: calc(50% - 8px); text-align: left; background: #fff; border: 0;
-  border-radius: 20px; padding: 0; margin-bottom: 16px; overflow: hidden;
+  width: 49%; width: calc(50% - 8px); background: #fff; cursor: pointer;
+  border-radius: 20px; margin-bottom: 16px; overflow: hidden; position: relative; min-height: 150px;
   box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.07);
-  display: flex; align-items: stretch;
 }
+.card:active { opacity: 0.75; }
 @media (max-width: 700px) { .card { width: 100%; } }
 .card-art {
-  width: 104px; min-height: 130px; display: flex; align-items: center; justify-content: center;
-  font-size: 50px; -webkit-flex-shrink: 0; flex-shrink: 0;
+  position: absolute; left: 0; top: 0; bottom: 0; width: 96px; text-align: center;
 }
-.card-body { padding: 16px 18px; -webkit-flex: 1; flex: 1; }
-.card-title { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 24px; line-height: 1.15; font-weight: 700; }
-.card-meta { font-size: 14px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
-.card-sum { font-size: 17px; color: #6b5f53; margin-top: 6px; line-height: 1.35; }
+.card-art span {
+  position: absolute; left: 0; right: 0; top: 50%; margin-top: -30px; height: 60px; line-height: 60px; font-size: 46px;
+}
+.emo { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; font-style: normal; font-weight: 400; }
+.card-body { margin-left: 96px; padding: 15px 18px 14px 18px; }
+/* list view */
+#viewseg { margin: 0 0 0 12px; padding: 3px; }
+#viewseg button { padding: 7px 12px; font-size: 16px; }
+#viewseg svg { vertical-align: -3px; margin-right: 5px; }
+#list.rows .card { width: 100%; min-height: 0; margin-bottom: 8px; border-radius: 14px; }
+#list.rows .card-art { width: 62px; }
+#list.rows .card-art span { font-size: 30px; margin-top: -20px; height: 40px; line-height: 40px; }
+#list.rows .card-body { margin-left: 62px; padding: 10px 16px 10px 16px; }
+#list.rows .card-title { font-size: 20px; -webkit-line-clamp: 1; max-height: 1.2em; }
+#list.rows .card-sum { display: none; }
+#list.rows .card-meta { display: inline-block; margin: 3px 14px 0 0; vertical-align: middle; }
+#list.rows .card-stats { display: inline-block; margin-top: 3px; vertical-align: middle; }
+.clamp2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.card-title { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 23px; line-height: 1.15; font-weight: 700; max-height: 2.3em; }
+.card-meta { font-size: 14px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-sum { font-size: 17px; color: #6b5f53; margin-top: 5px; line-height: 1.35; max-height: 2.7em; }
 .card-stats { margin-top: 8px; font-size: 15px; color: #6b5f53; font-weight: 600; }
 .card-stats .grp { display: inline-block; margin-right: 14px; white-space: nowrap; }
 .st { color: #e09a2d; letter-spacing: 1px; }
@@ -348,6 +364,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     </div>
     <div id="toolsrow">
       <button class="ftog" id="ftoggle"><svg width="20" height="18" viewBox="0 0 20 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="1" y1="3" x2="19" y2="3"/><line x1="4" y1="9" x2="16" y2="9"/><line x1="7.5" y1="15" x2="12.5" y2="15"/></svg>Filters<span id="factive"></span><span id="farrow">&#9662;</span></button>
+      <div class="seg" id="viewseg"><button data-v="cards"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="7" height="7" rx="1.5"/><rect x="9" y="0" width="7" height="7" rx="1.5"/><rect x="0" y="9" width="7" height="7" rx="1.5"/><rect x="9" y="9" width="7" height="7" rx="1.5"/></svg>Cards</button><button data-v="rows"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="1" width="16" height="3" rx="1.5"/><rect x="0" y="6.5" width="16" height="3" rx="1.5"/><rect x="0" y="12" width="16" height="3" rx="1.5"/></svg>List</button></div>
       <div id="sortrow">Sort by
       <select id="sort">
         <option value="az">A&ndash;Z</option>
@@ -432,7 +449,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   <div id="cook-nav"><button id="cook-prev">&lsaquo;&nbsp; Back</button><button id="cook-next">Next &nbsp;&rsaquo;</button></div>
 </div>
 
-<div id="alarm"><div id="alarm-icon">&#9200;</div><div id="alarm-label"></div><div id="alarm-sub">Time&rsquo;s up</div><button id="alarm-stop">Stop</button></div>
+<div id="alarm"><div id="alarm-icon" class="emo">&#9200;&#65039;</div><div id="alarm-label"></div><div id="alarm-sub">Time&rsquo;s up</div><button id="alarm-stop">Stop</button></div>
 <div id="share">
   <div id="share-box">
     <h2>Your ratings</h2>
@@ -658,12 +675,12 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       if (!matches(r, q)) return;
       n++;
       var t = theme(r.category);
-      h += '<button class="card" data-id="' + esc(r.id) + '">' +
-        '<div class="card-art" style="background:' + t.bg + '">' + esc(emojiFor(r)) + "</div>" +
-        '<div class="card-body"><div class="card-title">' + esc(r.title) + "</div>" +
+      h += '<div class="card" data-id="' + esc(r.id) + '">' +
+        '<div class="card-art" style="background:' + t.bg + '"><span class="emo">' + esc(emojiFor(r)) + "</span></div>" +
+        '<div class="card-body"><div class="card-title clamp2">' + esc(r.title) + "</div>" +
         '<div class="card-meta" style="color:' + t.fg + '">' + esc(r.category || "") + (timeOf(r) ? " &middot; " + esc(timeOf(r)) : "") + "</div>" +
-        (r.summary ? '<div class="card-sum">' + esc(r.summary) + "</div>" : "") +
-        '<div class="card-stats">' + cardStats(r) + "</div></div></button>";
+        (r.summary ? '<div class="card-sum clamp2">' + esc(r.summary) + "</div>" : "") +
+        '<div class="card-stats">' + cardStats(r) + "</div></div></div>";
     });
     $("list").innerHTML = n ? h : '<div class="empty">No recipes match. Try removing a filter.</div>';
     $("rcount").innerHTML = recipes.length + " recipe" + (recipes.length === 1 ? "" : "s");
@@ -678,6 +695,15 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     return h;
   }
   $("search").addEventListener("input", renderList, false);
+  var viewMode = load("view", "cards");
+  function applyView() {
+    $("list").className = viewMode === "rows" ? "rows" : "";
+    each($("viewseg").querySelectorAll("button"), function (b) { b.className = b.getAttribute("data-v") === viewMode ? "on" : ""; });
+  }
+  each($("viewseg").querySelectorAll("button"), function (b) {
+    tap(b, function () { viewMode = b.getAttribute("data-v"); store("view", viewMode); applyView(); });
+  });
+  applyView();
   $("sort").value = sortBy;
   $("sort").addEventListener("change", function () { sortBy = $("sort").value; store("sort", sortBy); renderList(); }, false);
 
@@ -692,7 +718,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   function renderHero() {
     var r = openRecipe, t = theme(r.category);
     $("hero").style.background = t.bg;
-    $("hero-art").innerHTML = esc(emojiFor(r));
+    $("hero-art").innerHTML = '<span class="emo">' + esc(emojiFor(r)) + "</span>";
     $("r-title").innerHTML = esc(r.title);
     $("r-sum").innerHTML = esc(r.summary || "");
     $("r-meta").innerHTML = (r.category ? '<span class="pill" style="color:' + t.fg + '">' + esc(r.category) + "</span>" : "") +
@@ -781,7 +807,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     each(r.steps || [], function (s, n) {
       h += '<div class="step" data-n="' + n + '"' + (n === curStep ? ' style="border-color:' + t.fg + '"' : "") + '>' +
         '<div class="step-n" style="color:' + t.fg + '">' + (n + 1) + "</div>" + stepHtml(s.t) +
-        (s.timer ? '<div><button class="tbtn" data-n="' + n + '">&#9201;&nbsp; Start ' + fmtDur(s.timer) + " timer</button></div>" : "") + "</div>";
+        (s.timer ? '<div><button class="tbtn" data-n="' + n + '"><span class="emo">&#9201;&#65039;</span>&nbsp; Start ' + fmtDur(s.timer) + " timer</button></div>" : "") + "</div>";
     });
     $("r-steps").innerHTML = h;
     each($("r-steps").querySelectorAll(".step"), function (d) {
@@ -807,12 +833,12 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   /* ---------- cook mode ---------- */
   function renderCook() {
     var r = openRecipe, s = r.steps[curStep], d = "";
-    $("cook-name").innerHTML = esc(emojiFor(r)) + "&nbsp; " + esc(r.title);
+    $("cook-name").innerHTML = '<span class="emo">' + esc(emojiFor(r)) + "</span>&nbsp; " + esc(r.title);
     each(r.steps, function (x, n) { d += '<span class="dot' + (n <= curStep ? " on" : "") + '"></span>'; });
     $("cook-dots").innerHTML = d;
     $("cook-count").innerHTML = "Step " + (curStep + 1) + " of " + r.steps.length;
     $("cook-text").innerHTML = stepHtml(s.t);
-    $("cook-timer").innerHTML = s.timer ? '<button class="tbtn" id="cook-t">&#9201;&nbsp; Start ' + fmtDur(s.timer) + " timer</button>" : "";
+    $("cook-timer").innerHTML = s.timer ? '<button class="tbtn" id="cook-t"><span class="emo">&#9201;&#65039;</span>&nbsp; Start ' + fmtDur(s.timer) + " timer</button>" : "";
     if (s.timer) tap($("cook-t"), function () { stepTimer(r, curStep); });
     $("cook-prev").style.visibility = curStep > 0 ? "visible" : "hidden";
     $("cook-next").innerHTML = curStep < r.steps.length - 1 ? "Next &nbsp;&rsaquo;" : "Finished &#10003;";
@@ -822,7 +848,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     if (!$("cook").className) return;
     var h = [];
     each(timers, function (t) { if (!t.done) h.push(esc(t.label) + " <b>" + fmtLeft(t) + "</b>"); });
-    $("cook-timers").innerHTML = h.length ? "&#9201;&nbsp; " + h.join(" &nbsp;&middot;&nbsp; ") : "";
+    $("cook-timers").innerHTML = h.length ? '<span class="emo">&#9201;&#65039;</span>&nbsp; ' + h.join(" &nbsp;&middot;&nbsp; ") : "";
   }
   tap($("cook-start"), function () { if (curStep < 0) curStep = 0; $("cook").className = "on"; renderCook(); });
   tap($("cook-close"), function () { $("cook").className = ""; renderRecipe(); });
