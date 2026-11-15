@@ -12,6 +12,9 @@
    Ingredient: { q: amount (number, scales with servings), u: "unit", n: "name" }
                or { text: "something that doesn't scale" }
    Step:       { t: "instruction", timer: seconds (optional), label: "timer name" (optional) }
+               In step text, {3} shows ingredient number 3 (counting from 0) with its amount,
+               e.g. "Add {5}" -> "Add 500g beef mince". Amounts follow the servings.
+               {3|other words} shows the amount with your own wording instead of the name.
 */
 window.KITCHEN_RECIPES = [
   {
@@ -33,19 +36,19 @@ window.KITCHEN_RECIPES = [
       { q: 2, u: "", n: "garlic cloves, crushed" },
       { q: 500, u: "g", n: "beef mince (5–10% fat)" },
       { q: 2, u: "tbsp", n: "tomato purée" },
-      { q: 400, u: "g", n: "tin chopped tomatoes" },
+      { q: 400, u: "g", n: "chopped tomatoes (1 tin)" },
       { q: 150, u: "ml", n: "beef stock or red wine" },
       { q: 1, u: "tsp", n: "dried oregano" },
       { q: 350, u: "g", n: "spaghetti" },
       { text: "Salt, pepper and grated Parmesan to serve" }
     ],
     steps: [
-      { t: "Heat the oil in a large pan over a medium heat. Add the onion, carrot and celery with a pinch of salt and cook gently until soft.", timer: 600, label: "Soften veg" },
-      { t: "Add the garlic and cook for 1 minute.", timer: 60, label: "Garlic" },
-      { t: "Turn the heat up, add the mince and break it up with a spoon. Fry until browned all over.", timer: 300, label: "Brown mince" },
-      { t: "Stir in the tomato purée, then the chopped tomatoes, stock (or wine) and oregano. Bring to a simmer." },
+      { t: "Heat {0} in a large pan over a medium heat. Add {1}, {2} and {3} with a pinch of salt and cook gently until soft.", timer: 600, label: "Soften veg" },
+      { t: "Add {4} and cook for 1 minute.", timer: 60, label: "Garlic" },
+      { t: "Turn the heat up, add {5} and break it up with a spoon. Fry until browned all over.", timer: 300, label: "Brown mince" },
+      { t: "Stir in {6}, then {7}, {8} and {9}. Bring to a simmer." },
       { t: "Cover with a lid slightly ajar and simmer gently, stirring now and then. Add a splash of water if it gets too thick.", timer: 1800, label: "Simmer sauce" },
-      { t: "Meanwhile, cook the spaghetti in plenty of salted boiling water according to the packet (usually about 10 minutes).", timer: 600, label: "Spaghetti" },
+      { t: "Meanwhile, cook {10} in plenty of salted boiling water according to the packet (usually about 10 minutes).", timer: 600, label: "Spaghetti" },
       { t: "Season the sauce to taste. Drain the pasta, saving a cup of the water, and toss through the sauce, loosening with pasta water if needed. Serve with Parmesan." }
     ],
     notes: "Freezes for up to 3 months. A splash of milk in the last 10 minutes makes it silkier."
@@ -71,9 +74,9 @@ window.KITCHEN_RECIPES = [
       { text: "Salt, pepper and chopped chives to serve" }
     ],
     steps: [
-      { t: "Melt the butter in a large pan. Add the leeks and onion with a pinch of salt, cover and sweat gently without browning.", timer: 600, label: "Sweat leeks" },
-      { t: "Add the potatoes and stock. Bring to the boil, then simmer until the potatoes are completely soft.", timer: 1200, label: "Simmer soup" },
-      { t: "Blend until smooth (or leave chunky if you prefer). Stir in the cream or milk and reheat gently without boiling." },
+      { t: "Melt {0} in a large pan. Add {1} and {2} with a pinch of salt, cover and sweat gently without browning.", timer: 600, label: "Sweat leeks" },
+      { t: "Add {3} and {4}. Bring to the boil, then simmer until the potatoes are completely soft.", timer: 1200, label: "Simmer soup" },
+      { t: "Blend until smooth (or leave chunky if you prefer). Stir in {5} and reheat gently without boiling." },
       { t: "Season well and serve scattered with chives." }
     ],
     notes: "Keeps 3 days in the fridge. Freeze before adding the cream."
@@ -103,11 +106,11 @@ window.KITCHEN_RECIPES = [
     ],
     steps: [
       { t: "Heat the oven to 190°C (170°C fan, gas 5). Butter two 20cm sandwich tins and line the bases with baking paper." },
-      { t: "Put the butter, sugar, eggs, flour, baking powder and milk in a large bowl and beat until smooth and just combined. Don't overmix." },
+      { t: "Put {0}, {1}, {2}, {3}, {4} and {5} in a large bowl and beat until smooth and just combined. Don't overmix." },
       { t: "Divide between the tins, level the tops and bake until golden and a skewer comes out clean.", timer: 1200, label: "Sponges" },
       { t: "Cool in the tins for 5 minutes, then turn out onto a wire rack to cool completely.", timer: 300, label: "Cool in tins" },
-      { t: "Beat the butter and icing sugar together until pale and fluffy." },
-      { t: "Spread jam on one sponge and buttercream on the other, sandwich together and dust the top with caster sugar." }
+      { t: "For the buttercream, beat {6|butter} and {7} together until pale and fluffy." },
+      { t: "Spread {8} on one sponge and the buttercream on the other, sandwich together and dust the top with caster sugar." }
     ],
     notes: "Best eaten the same day. Keeps 2 days in a tin."
   },
@@ -134,8 +137,8 @@ window.KITCHEN_RECIPES = [
     ],
     steps: [
       { t: "Heat the oven to 180°C (160°C fan, gas 4). Grease and line a 900g (2lb) loaf tin." },
-      { t: "Mash the bananas in a large bowl, then stir in the melted butter, sugar, eggs and vanilla." },
-      { t: "Fold in the flour, cinnamon and any nuts or chocolate until just combined." },
+      { t: "Mash {0} in a large bowl, then stir in {1|melted butter}, {2}, {3} and {4}." },
+      { t: "Fold in {5}, {6} and {7} until just combined." },
       { t: "Pour into the tin and bake until risen and a skewer comes out clean. Cover with foil if it browns too fast.", timer: 3300, label: "Banana bread" },
       { t: "Cool in the tin for 10 minutes, then lift out onto a rack.", timer: 600, label: "Cool in tin" }
     ],
@@ -164,10 +167,10 @@ window.KITCHEN_RECIPES = [
     ],
     steps: [
       { t: "Take the chicken out of the fridge 30 minutes before cooking. Heat the oven to 200°C (180°C fan, gas 6).", timer: 1800, label: "Chicken to room temp" },
-      { t: "Lay the onions in a roasting tin and sit the chicken on top. Stuff the lemon, garlic and thyme into the cavity. Rub the butter over the skin and season well." },
+      { t: "Lay {4} in a roasting tin and sit {0} on top. Stuff {1|lemon halves}, {2|garlic bulb halves} and the thyme into the cavity. Rub {3} over the skin and season well." },
       { t: "Roast for about 20 minutes per 500g plus 20 minutes (around 1 hr 25 for a 1.6kg bird), until the juices run clear and the thickest part reaches 75°C.", timer: 5100, label: "Roast chicken" },
       { t: "Lift the chicken onto a board, cover loosely with foil and rest.", timer: 900, label: "Rest chicken" },
-      { t: "While it rests, put the tin on the hob, stir the flour into the juices and onions, then whisk in the stock. Bubble until thickened, then strain into a jug.", timer: 300, label: "Gravy" }
+      { t: "While it rests, put the tin on the hob, stir {5} into the juices and onions, then whisk in {6}. Bubble until thickened, then strain into a jug.", timer: 300, label: "Gravy" }
     ],
     notes: "Use the carcass to make stock for the leek & potato soup."
   },
@@ -191,7 +194,7 @@ window.KITCHEN_RECIPES = [
       { text: "Lemon wedges and caster sugar to serve" }
     ],
     steps: [
-      { t: "Whisk the flour, eggs, milk, oil and salt into a smooth batter. Rest it if you have time.", timer: 1800, label: "Rest batter" },
+      { t: "Whisk {0}, {1}, {2}, {3} and a pinch of salt into a smooth batter. Rest it if you have time.", timer: 1800, label: "Rest batter" },
       { t: "Heat a non-stick frying pan over a medium heat and wipe it with a little oil." },
       { t: "Pour in a small ladleful of batter and swirl to coat the base thinly. Cook until golden underneath.", timer: 60, label: "First side" },
       { t: "Flip and cook the other side.", timer: 30, label: "Second side" },

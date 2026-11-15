@@ -57,8 +57,18 @@ h3 {
   background: #fff; -webkit-appearance: none; outline: none;
   box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 14px rgba(60,40,20,0.06);
 }
+#toolsrow { display: flex; align-items: center; margin: 14px 0 14px 0; }
+.ftog {
+  border: 0; background: #fff; border-radius: 14px; padding: 9px 16px; font-size: 17px; font-weight: 700; color: #2a2420;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.08); display: flex; align-items: center; max-width: 70%;
+}
+.ftog svg { margin-right: 8px; -webkit-flex-shrink: 0; flex-shrink: 0; }
+.ftog.active { background: #1f2b24; color: #fff; }
+#factive { font-weight: 500; margin-left: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.85; }
+#farrow { margin-left: 8px; display: inline-block; -webkit-transition: -webkit-transform 0.2s; transition: transform 0.2s; }
+.ftog.open #farrow { -webkit-transform: rotate(180deg); transform: rotate(180deg); }
 #cats {
-  margin: 16px 0 14px 0; background: #fff; border-radius: 20px; padding: 14px 16px 6px 16px;
+  margin: 0 0 14px 0; background: #fff; border-radius: 20px; padding: 14px 16px 6px 16px;
   box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 4px 14px rgba(60,40,20,0.05);
 }
 .frow { display: flex; align-items: flex-start; }
@@ -99,7 +109,7 @@ h3 {
 .unrated { color: #b9ad9e; font-style: italic; font-weight: 500; }
 .edots { letter-spacing: 1px; }
 .edots i { font-style: normal; color: #e3d8c8; }
-#sortrow { margin: 0 0 12px 0; font-size: 16px; color: #9a8b78; font-weight: 700; }
+#sortrow { margin: 0 0 0 auto; white-space: nowrap; font-size: 16px; color: #9a8b78; font-weight: 700; }
 #sortrow select {
   font-size: 17px; font-weight: 600; padding: 7px 12px; border-radius: 12px; border: 0;
   background: #ece3d5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235d5246' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;
@@ -107,11 +117,15 @@ h3 {
 }
 /* ratings panel on recipe page */
 #r-rate {
-  display: flex; flex-wrap: wrap; background: #fff; border-radius: 20px; padding: 14px 10px; margin-bottom: 18px;
+  overflow: hidden; background: #fff; border-radius: 20px; padding: 6px 0; margin-bottom: 18px;
   box-shadow: 0 1px 2px rgba(60,40,20,0.06), 0 6px 18px rgba(60,40,20,0.06);
 }
-.rate-box { -webkit-flex: 1; flex: 1; min-width: 200px; padding: 4px 14px; border-left: 1px solid #f1eadf; }
-.rate-box:first-child { border-left: 0; }
+.rate-box { float: left; width: 50%; padding: 10px 22px; border-left: 1px solid #f1eadf; min-height: 96px; }
+.rate-box.first { border-left: 0; clear: left; }
+.rate-box.row2 { border-top: 1px solid #f1eadf; min-height: 0; padding: 12px 22px; }
+.rate-box.row2 .rate-lbl { display: inline-block; width: 70px; }
+.rate-box.row2 .rate-val { display: inline-block; margin: 0 10px 0 0; }
+.rate-box.row2 .rate-sub { display: inline-block; }
 .rate-lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: #9a8b78; font-weight: 700; }
 .rate-val { font-size: 22px; font-weight: 700; margin-top: 4px; }
 .rate-sub { font-size: 14px; color: #9a8b78; font-weight: 600; }
@@ -211,6 +225,8 @@ h3 {
 .dot.on { background: #e09a2d; }
 #cook-count { font-size: 20px; color: #e09a2d; font-weight: 700; margin-top: 22px; letter-spacing: 1px; text-transform: uppercase; }
 #cook-text { font-family: "Iowan Old Style", "Palatino", Georgia, serif; font-size: 40px; line-height: 1.35; margin-top: 14px; }
+#cook-text .qty { color: #f0b75a; }
+.step .qty { color: #2a2420; }
 #cook-timer { margin-top: 26px; }
 #cook-timer .tbtn { background: #e09a2d; color: #fff; font-size: 24px; padding: 16px 26px; border-radius: 16px; }
 #cook-nav { position: absolute; left: 44px; right: 44px; bottom: 36px; display: flex; }
@@ -330,8 +346,9 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9a8b78" stroke-width="2.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><line x1="16" y1="16" x2="21.5" y2="21.5"/></svg>
       <input id="search" type="text" placeholder="Search recipes or ingredients" autocomplete="off" autocorrect="off">
     </div>
-    <div id="cats"></div>
-    <div id="sortrow">Sort by
+    <div id="toolsrow">
+      <button class="ftog" id="ftoggle"><svg width="20" height="18" viewBox="0 0 20 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="1" y1="3" x2="19" y2="3"/><line x1="4" y1="9" x2="16" y2="9"/><line x1="7.5" y1="15" x2="12.5" y2="15"/></svg>Filters<span id="factive"></span><span id="farrow">&#9662;</span></button>
+      <div id="sortrow">Sort by
       <select id="sort">
         <option value="az">A&ndash;Z</option>
         <option value="taste">Best rated</option>
@@ -339,7 +356,9 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
         <option value="quick">Quickest</option>
         <option value="easy">Easiest</option>
       </select>
+      </div>
     </div>
+    <div id="cats"></div>
     <div id="list"></div>
     <div id="listfoot"><span id="rcount"></span> &middot; <button class="linkbtn" id="refresh">Check for new recipes</button> &middot; <button class="linkbtn" id="share-open">Share ratings</button> &middot; <button class="linkbtn" id="reload-page">Reload page</button></div>
   </div>
@@ -559,6 +578,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     { name: "Style", tags: ["Quick", "Slow cook", "One pot", "Freezer friendly", "Batch cook", "Budget", "Weekend"] }
   ];
   var sel = {}; // selected tags
+  var filtersOpen = false;
   function tagsOf(r) {
     var t = (r.tags || []).slice(0);
     if (r.minutes && r.minutes <= 30 && t.indexOf("Quick") < 0) t.push("Quick");
@@ -600,12 +620,17 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
       if (chips) h += '<div class="frow"><div class="flbl">' + esc(g.name) + '</div><div class="fchips">' + chips + "</div></div>";
     });
     $("cats").innerHTML = h;
-    $("cats").style.display = h ? "block" : "none";
+    $("cats").style.display = h && filtersOpen ? "block" : "none";
+    var on = []; for (k in sel) if (sel[k]) on.push(k);
+    $("factive").innerHTML = on.length ? "&middot; " + esc(on.join(", ")) : "";
+    $("ftoggle").className = "ftog" + (on.length ? " active" : "") + (filtersOpen ? " open" : "");
+    $("ftoggle").style.display = h ? "" : "none";
     each($("cats").querySelectorAll(".chip[data-t]"), function (b) {
       tap(b, function () { var t = b.getAttribute("data-t"); sel[t] = !sel[t]; renderCats(); renderList(); });
     });
     if ($("fclear")) tap($("fclear"), function () { sel = {}; renderCats(); renderList(); });
   }
+  tap($("ftoggle"), function () { filtersOpen = !filtersOpen; renderCats(); });
   function matches(r, q) {
     if (!q) return true;
     var hay = (r.title + " " + (r.summary || "") + " " + (r.category || "") + " " + tagsOf(r).join(" ")).toLowerCase();
@@ -682,10 +707,10 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   function renderRate() {
     var r = openRecipe, ts = getRating(r, "taste"), ks = getRating(r, "kids");
     $("r-rate").innerHTML =
-      '<div class="rate-box"><div class="rate-lbl">How good is it?</div>' + starButtons("taste", ts) + '<div class="rate-sub">' + RATE_WORDS[ts] + "</div></div>" +
+      '<div class="rate-box first"><div class="rate-lbl">How good is it?</div>' + starButtons("taste", ts) + '<div class="rate-sub">' + RATE_WORDS[ts] + "</div></div>" +
       '<div class="rate-box"><div class="rate-lbl">Kids&rsquo; verdict</div>' + starButtons("kids", ks) + '<div class="rate-sub">' + KID_WORDS[ks] + "</div></div>" +
-      '<div class="rate-box"><div class="rate-lbl">Time</div><div class="rate-val">' + esc(timeOf(r) || "–") + '</div><div class="rate-sub">' + timeWord(r.minutes) + "</div></div>" +
-      '<div class="rate-box"><div class="rate-lbl">Effort</div><div class="rate-val">' + (r.effort ? effortStr(r.effort) : "–") + "</div></div>";
+      '<div class="rate-box first row2"><div class="rate-lbl">Time</div><div class="rate-val">' + esc(timeOf(r) || "–") + '</div><div class="rate-sub">' + timeWord(r.minutes) + "</div></div>" +
+      '<div class="rate-box row2"><div class="rate-lbl">Effort</div><div class="rate-val">' + (r.effort ? effortStr(r.effort) : "–") + "</div></div>";
     each($("r-rate").querySelectorAll(".sbtn"), function (b) {
       tap(b, function () {
         var k = b.getAttribute("data-k"), v = +b.getAttribute("data-v");
@@ -697,10 +722,29 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
   function closeRecipe() { openRecipe = null; showTab("recipes"); }
   tap($("r-back"), closeRecipe);
 
+  // "onion, chopped" -> "onions, chopped" when there's more than one
+  function plural(name, qty) {
+    if (qty < 1.5) return name;
+    var parts = name.split(","), first = parts[0];
+    if (!/s$/.test(first)) first = /(ch|sh|x)$/.test(first) ? first + "es" : first + "s";
+    parts[0] = first;
+    return parts.join(",");
+  }
   function ingText(i) {
     if (i.text) return esc(i.text);
     var f = serves / (openRecipe.serves || serves);
-    return '<span class="qty">' + esc(fmtQty(i.q * f, i.u)) + "</span> " + esc(i.n);
+    return '<span class="qty">' + esc(fmtQty(i.q * f, i.u)) + "</span> " + esc(i.u ? i.n : plural(i.n, Math.round(i.q * f)));
+  }
+  // Turns "Add {5}" into "Add <b>500g</b> beef mince", scaled to the current servings
+  function stepHtml(text) {
+    var ings = openRecipe.ingredients || [], f = serves / (openRecipe.serves || serves);
+    return esc(text).replace(/\{(\d+)(?:\|([^}]+))?\}/g, function (m, n, label) {
+      var i = ings[+n];
+      if (!i) return m;
+      if (i.text) return esc(label || i.text);
+      var name = label || esc((i.u ? i.n : plural(i.n, Math.round(i.q * f))).split(",")[0].replace(/\s*\([^)]*\)/g, ""));
+      return '<span class="qty">' + esc(fmtQty(i.q * f, i.u)) + "</span> " + name;
+    });
   }
   function fmtDur(s) {
     var m = Math.floor(s / 60), sec = s % 60;
@@ -723,7 +767,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     h = "";
     each(r.steps || [], function (s, n) {
       h += '<div class="step" data-n="' + n + '"' + (n === curStep ? ' style="border-color:' + t.fg + '"' : "") + '>' +
-        '<div class="step-n" style="color:' + t.fg + '">' + (n + 1) + "</div>" + esc(s.t) +
+        '<div class="step-n" style="color:' + t.fg + '">' + (n + 1) + "</div>" + stepHtml(s.t) +
         (s.timer ? '<div><button class="tbtn" data-n="' + n + '">&#9201;&nbsp; Start ' + fmtDur(s.timer) + " timer</button></div>" : "") + "</div>";
     });
     $("r-steps").innerHTML = h;
@@ -754,7 +798,7 @@ th { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9a
     each(r.steps, function (x, n) { d += '<span class="dot' + (n <= curStep ? " on" : "") + '"></span>'; });
     $("cook-dots").innerHTML = d;
     $("cook-count").innerHTML = "Step " + (curStep + 1) + " of " + r.steps.length;
-    $("cook-text").innerHTML = esc(s.t);
+    $("cook-text").innerHTML = stepHtml(s.t);
     $("cook-timer").innerHTML = s.timer ? '<button class="tbtn" id="cook-t">&#9201;&nbsp; Start ' + fmtDur(s.timer) + " timer</button>" : "";
     if (s.timer) tap($("cook-t"), function () { stepTimer(r, curStep); });
     $("cook-prev").style.visibility = curStep > 0 ? "visible" : "hidden";
